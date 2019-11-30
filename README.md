@@ -1,6 +1,10 @@
 # LuckyNumber
 with special cal ,get some numbers.20191130
 
+1    git pull  ----> go to work
+2    change something ----> git add .
+3    save            -----> git commit -m 'content'
+4    git push
 
 1、MongoDB数据库备份
     1、语法：
