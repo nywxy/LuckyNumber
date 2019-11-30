@@ -38,7 +38,24 @@ def jxM7(red):
         result = int((sum(red) - red[0]) / red[0])
     return Right(result)
 
+def jxM8(red):
+    if int((sum(red) - red[1]) / red[1]) > 33:
+        result = int((sum(red) - red[1]) / red[1]) - 33
+    else:
+        result = int((sum(red) - red[1]) / red[1])
+    return Right(result)
 
+def jxM9(red):
+    return Right(int((sum(red) - red[2]) / red[2]))
+
+def jxM10(red):
+    return Right(int((sum(red) - red[3]) / red[3]))
+
+def jxM11(red):
+    return Right(int((sum(red) - red[4]) / red[4]))
+
+def jxM12(red):
+    return Right(int((sum(red) - red[5]) / red[5]))
 
 
 
