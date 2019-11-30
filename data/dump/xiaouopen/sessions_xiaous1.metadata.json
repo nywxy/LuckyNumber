@@ -1,0 +1,1 @@
+{ "indexes" : [ { "v" : 1, "key" : { "_id" : 1 }, "name" : "_id_", "ns" : "xiaouopen.sessions_xiaous1" }, { "v" : 1, "key" : { "expires" : 1 }, "name" : "expires_1", "ns" : "xiaouopen.sessions_xiaous1", "expireAfterSeconds" : 0 } ] }
