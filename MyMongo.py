@@ -1,6 +1,6 @@
 import pymongo
 import urllib.request
-import re
+from calfunc import *
 from LuckyNum import *
 
 class myDb:
@@ -17,6 +17,7 @@ class myDb:
 
     def createTerm(self,col):
         if col.count() > 10 :
+            print('is not here')
             return;
         else:
             #fill TermTable from network
@@ -49,5 +50,9 @@ class myDb:
 
 if __name__ == '__main__':
     db = myDb()
+    for x in db.getAllTerm():
+        print(x)
+
+    print(jxM2([3, 16, 18, 31, 32, 33]))
 
 
