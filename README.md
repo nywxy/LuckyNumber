@@ -1,5 +1,5 @@
 # LuckyNumber
-with special cal ,get some numbers
+with special cal ,get some numbers.20191130
 
 
 1、MongoDB数据库备份
