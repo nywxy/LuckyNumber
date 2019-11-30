@@ -57,6 +57,68 @@ def jxM11(red):
 def jxM12(red):
     return Right(int((sum(red) - red[5]) / red[5]))
 
+def jxM13(red):
+    return Right((sum(red) - red[0]) % red[0])
+
+def jxM14(red):
+    return Right((sum(red) - red[1]) % red[1])
+
+def jxM15(red):
+    return Right((sum(red) - red[2]) % red[2])
+
+def jxM16(red):
+    return Right((sum(red) - red[3]) % red[3])
+
+def jxM17(red):
+    return Right((sum(red) - red[4]) % red[4])
+
+def jxM18(red):
+    return Right((sum(red) - red[5]) % red[5])
+
+def jxM19(red):
+    return Right(int(math.pow(red[0]*red[1],1/2)))
+
+def jxM20(red):
+    return Right(int(math.pow(red[1]*red[2],1/2)))
+
+def jxM21(red):
+    return Right(int(math.pow(red[2]*red[3],1/2)))
+
+def jxM22(red):
+    return Right(int(math.pow(red[3]*red[4],1/2)))
+
+def jxM23(red):
+    return Right(int(math.pow(red[4]*red[5],1/2)))
+
+def jxM24(red):
+    return Right(int(math.pow(red[0]*red[5],1/2)))
+
+def jxM25(red):
+    return Right(int(math.pow(red[0]*red[2],1/2)))
+
+def jxM26(red):
+    return Right(int(math.pow(red[0]*red[3],1/2)))
+
+def jxM27(red):
+    return Right(int(math.pow(red[0]*red[4],1/2)))
+
+def jxM28(red):
+    return Right(int(math.pow(red[1]*red[3],1/2)))
+
+def jxM29(red):
+    return Right(int(math.pow(red[1]*red[4],1/2)))
+
+def jxM30(red):
+    return Right(int(math.pow(red[1]*red[5],1/2)))
+
+def jxM31(red):
+    return Right(int(math.pow(red[2]*red[4],1/2)))
+
+def jxM32(red):
+    return Right(int(math.pow(red[2]*red[5],1/2)))
+
+def jxM33(red):
+    return Right(int(math.pow(red[3]*red[5],1/2)))
 
 
 #测试数据，已18、19、20数据进行
