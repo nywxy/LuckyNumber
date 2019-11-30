@@ -48,6 +48,6 @@ class myDb:
 
 
 if __name__ == '__main__':
-    luckdb = myDb()
+    db = myDb()
 
 
