@@ -120,6 +120,105 @@ def jxM32(red):
 def jxM33(red):
     return Right(int(math.pow(red[3]*red[5],1/2)))
 
+def jxM34(red,blue):
+    if red[5]+blue <= 33:
+        result = red[5]+blue
+    else:
+        result = red[5]+blue-33
+    return Right(result)
+
+def jxM35(red,blue):
+    return Right(round((red[1]+red[2]+red[3]+red[4]+blue)/6,0))
+
+def jxM36(red,blue):
+    return Right(red[1]+blue)
+
+def jxM37(red):
+    return Right(red[5]-red[1]+1)
+
+def jxM38(red):
+    if red[1]+red[5]+1 <=33:
+        return Right(red[1]+red[5]+1)
+    else:
+        return Right(red[1]+red[5]+1-33)
+
+def jxM39(red):
+    if red[5]-red[1]+10 <=33:
+        return Right(red[5]-red[1]+10)
+    else:
+        return Right(red[5]-red[1]+10-33)
+
+def jxM40(red):
+    return Right(red[0]+red[1])
+
+def jxM41(red):
+    if red[3]+red[0] > 33:
+        return Right(red[3]+red[0] -33)
+    else:
+        return Right(red[3]+red[0])
+
+def jxM42(red):
+    return Right(red[3]-red[0]+7)
+
+
+def jxM43(red):
+    return Right(int(sum(red[2:6])/4))
+
+def jxM44(red):
+    return Right(int(sum(red[:3])/3))
+
+def jxM45(red):
+    if red[1]+red[2] <= 33:
+        return Right(red[1]+red[2])
+    else:
+        return Right(red[1]+red[2]-33)
+
+def jxM46(red):
+    return Right(abs(red[4]-red[3]+10))
+
+def jxM47(red):
+    return Right(red[0]+12)
+
+def jxM48(red):
+    return Right(red[1]-red[0])
+
+def jxM49(red):
+    return Right(red[2]-red[0])
+
+def jxM50(red):
+    return Right(red[3]-red[0])
+
+def jxM51(red):
+    return Right(red[4]-red[0])
+
+def jxM52(red):
+    return Right(red[5]-red[0])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #测试数据，已18、19、20数据进行
 d18 = [8,12,21,22,27,31]
