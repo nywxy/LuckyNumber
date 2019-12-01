@@ -1,6 +1,7 @@
 class luckyNum:
     def __init__(self):
         self.termID = '2019001'
+        self.moduleID = 0
         self.groupID = 0
         self.last = 100
         self.rightnum = 0
