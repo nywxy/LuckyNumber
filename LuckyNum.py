@@ -4,8 +4,9 @@ class luckyNum:
         self.moduleID = 0
         self.groupID = 0
         self.last = 100
-        self.rightnum = 0
         self.num = []
+        self.numSize = 0
+        self.rightNum = 0
 
 class term:
     def __init__(self):
