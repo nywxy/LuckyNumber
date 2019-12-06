@@ -53,10 +53,10 @@ class myDb:
         return datas
 
 
-if __name__ == '__main__':
-    db = myDb()
-    for data in db.getTermDatas(5):
-        print(data['red'],data['blue'])
+# if __name__ == '__main__':
+#     db = myDb()
+#     for data in db.getTermDatas(5):
+#         print(data['red'],data['blue'])
 
 
 

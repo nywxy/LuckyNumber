@@ -860,11 +860,3 @@ def	jxM218(red,blue):
 	return Right(round(sum(red)/40,0))
 
 
-
-#测试数据，已18、19、20数据进行
-d18 = [8,12,21,22,27,31]
-d19 = [3,13,14,16,25,27]
-d20 = [3,4,18,26,27,33]
-
-for i in range(1,5):
-    print(eval('jxM%d'%i)(d18,0))
