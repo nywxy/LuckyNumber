@@ -47,12 +47,16 @@ class myDb:
         finally:
             return terms
 
+    def getTermDatas(self,scope):
+        print("-------------------------")
+        datas = self.tterm.find().sort("termID",-1).limit(scope)
+        return datas
+
 
 if __name__ == '__main__':
     db = myDb()
-    for x in db.getAllTerm():
-        print(x)
+    for data in db.getTermDatas(5):
+        print(data['red'],data['blue'])
 
-    print(jxM2([3, 16, 18, 31, 32, 33]))
 
 
