@@ -128,7 +128,7 @@ def jxM34(red,blue):
     return Right(result)
 
 def jxM35(red,blue):
-    return Right(round((red[1]+red[2]+red[3]+red[4]+blue)/6,0))
+    return Right(round((red[1]+red[2]+red[3]+red[4]+blue)/6))
 
 def jxM36(red,blue):
     return Right(red[1]+blue)
@@ -632,7 +632,7 @@ def	jxM153(red,blue):
         return Right(red[5] + 11)
 
 def	jxM154(red,blue):
-	return Right(round(sum(red)/39,0))
+	return Right(round(sum(red)/39))
 
 def	jxM155(red,blue):
 	return Right(abs(red[0]-9))
@@ -653,7 +653,7 @@ def	jxM160(red,blue):
 	return Right(abs(red[5]-9))
 
 def	jxM161(red,blue):
-	return Right(round(sum(red)/38,0))
+	return Right(round(sum(red)/38))
 
 def	jxM162(red,blue):
 	return Right(red[0]+9)
@@ -686,7 +686,7 @@ def	jxM167(red,blue):
         return Right(red[5] + 9)
 
 def	jxM168(red,blue):
-	return Right(sum(sum(red[:4]),min(red))/6-3)
+	return Right((sum(red[:4])+min(red))/6-3)
 
 def	jxM169(red,blue):
 	return Right(max(min((red[1]-red[0]),(red[2]-red[0]),(red[3]-red[0]),(red[4]-red[0]),(red[5]-red[0])),min((red[1]-red[0]),(red[2]-red[1]),(red[3]-red[1]),(red[4]-red[1]),(red[5]-red[1])),min((red[2]-red[0]),(red[2]-red[1]),(red[3]-red[2]),(red[4]-red[2]),(red[5]-red[2])),min((red[3]-red[0]),(red[3]-red[1]),(red[3]-red[2]),(red[4]-red[3]),(red[5]-red[3])),min((red[4]-red[0]),(red[4]-red[1]),(red[4]-red[2]),(red[4]-red[3]),(red[5]-red[4])),min((red[5]-red[0]),(red[5]-red[1]),(red[5]-red[2]),(red[5]-red[3]),(red[5]-red[4]))))
@@ -725,138 +725,138 @@ def	jxM176(red,blue):
         return Right(int(sum(red)/4))
 
 def	jxM177(red,blue):
-    if round(sum(red)/3,0)>33:
-        return Right(round(sum(red)/3,0)-33)
+    if round(sum(red)/3)>33:
+        return Right(round(sum(red)/3)-33)
     else:
-        return Right(round(sum(red)/3,0))
+        return Right(round(sum(red)/3))
 
 
 def	jxM178(red,blue):
-    if round(sum(red)/2,0)>66:
-        return Right(round(sum(red)/2,0)-66)
+    if round(sum(red)/2)>66:
+        return Right(round(sum(red)/2)-66)
     elif round(sum(red)/2,0)>33:
-        return Right(round(sum(red)/2,0)-33)
+        return Right(round(sum(red)/2)-33)
     else:
-        return Right(round(sum(red)/2,0))
+        return Right(round(sum(red)/2))
 
 def	jxM179(red,blue):
-	return Right(round(sum(red)/7,0))
+	return Right(round(sum(red)/7))
 
 def	jxM180(red,blue):
-	return Right(round(sum(red)/8,0))
+	return Right(round(sum(red)/8))
 
 def	jxM181(red,blue):
-	return Right(round(sum(red)/9,0))
+	return Right(round(sum(red)/9))
 
 def	jxM182(red,blue):
-	return Right(round(sum(red)/10,0))
+	return Right(round(sum(red)/10))
 
 def	jxM183(red,blue):
-	return Right(round(sum(red)/11,0))
+	return Right(round(sum(red)/11))
 
 def	jxM184(red,blue):
-	return Right(round(sum(red)/12,0))
+	return Right(round(sum(red)/12))
 
 def	jxM185(red,blue):
-	return Right(round(sum(red)/13,0))
+	return Right(round(sum(red)/13))
 
 def	jxM186(red,blue):
-	return Right(round(sum(red)/14,0))
+	return Right(round(sum(red)/14))
 
 def	jxM187(red,blue):
-	return Right(round(sum(red)/15,0))
+	return Right(round(sum(red)/15))
 
 def	jxM188(red,blue):
-	return Right(round(math.pow((red[0]*red[1]+red[2]),1/2),0))
+	return Right(round(math.pow((red[0]*red[1]+red[2]),1/2)))
 
 def	jxM189(red,blue):
-	return Right(round(math.pow((red[0]*red[1]+red[3]),1/2),0))
+	return Right(round(math.pow((red[0]*red[1]+red[3]),1/2)))
 
 def	jxM190(red,blue):
-	return Right(round(math.pow((red[0]*red[1]+red[4]),1/2),0))
+	return Right(round(math.pow((red[0]*red[1]+red[4]),1/2)))
 
 def	jxM191(red,blue):
-	return Right(round(math.pow((red[1]*red[0]+red[5]),1/2),0))
+	return Right(round(math.pow((red[1]*red[0]+red[5]),1/2)))
 
 def	jxM192(red,blue):
-	return Right(round(math.pow((red[5]*red[0]+red[1]),1/2),0))
+	return Right(round(math.pow((red[5]*red[0]+red[1]),1/2)))
 
 def	jxM193(red,blue):
-	return Right(round(math.pow((red[0]*red[5]+red[2]),1/2),0))
+	return Right(round(math.pow((red[0]*red[5]+red[2]),1/2)))
 
 def	jxM194(red,blue):
-	return Right(round(math.pow((red[0]*red[5]+red[3]),1/2),0))
+	return Right(round(math.pow((red[0]*red[5]+red[3]),1/2)))
 
 def	jxM195(red,blue):
-	return Right(round(math.pow((red[0]*red[5]+red[4]),1/2),0))
+	return Right(round(math.pow((red[0]*red[5]+red[4]),1/2)))
 
 def	jxM196(red,blue):
-	return Right(round(sum(red)/16,0))
+	return Right(round(sum(red)/16))
 
 def	jxM197(red,blue):
-	return Right(round(sum(red)/35,0))
+	return Right(round(sum(red)/35))
 
 def	jxM198(red,blue):
-	return Right(round(math.pow((red[2]*red[3]+red[0]),1/2),0))
+	return Right(round(math.pow((red[2]*red[3]+red[0]),1/2)))
 
 def	jxM199(red,blue):
-	return Right(round(math.pow((red[2]*red[3]+red[4]),1/2),0))
+	return Right(round(math.pow((red[2]*red[3]+red[4]),1/2)))
 
 def	jxM200(red,blue):
-	return Right(round(math.pow((red[5]*red[4]+red[0]),1/2),0))
+	return Right(round(math.pow((red[5]*red[4]+red[0]),1/2)))
 
 def	jxM201(red,blue):
-	return Right(round(math.pow((red[3]*red[4]+red[1]),1/2),0))
+	return Right(round(math.pow((red[3]*red[4]+red[1]),1/2)))
 
 def	jxM202(red,blue):
-	return Right(round(math.pow((red[3]*red[4]+red[0]),1/2),0))
+	return Right(round(math.pow((red[3]*red[4]+red[0]),1/2)))
 
 def	jxM203(red,blue):
-	return Right(round(math.pow((red[3]*red[4]+red[5]),1/2),0))
+	return Right(round(math.pow((red[3]*red[4]+red[5]),1/2)))
 
 def	jxM204(red,blue):
-	return Right(round(sum(red)/19,0))
+	return Right(round(sum(red)/19))
 
 def	jxM205(red,blue):
-	return Right(round(sum(red)/20,0))
+	return Right(round(sum(red)/20))
 
 def	jxM206(red,blue):
-	return Right(round(sum(red)/21,0))
+	return Right(round(sum(red)/21))
 
 def	jxM207(red,blue):
-	return Right(round(sum(red)/24,0))
+	return Right(round(sum(red)/24))
 
 def	jxM208(red,blue):
-	return Right(round(sum(red)/25,0))
+	return Right(round(sum(red)/25))
 
 def	jxM209(red,blue):
-	return Right(round(sum(red)/26,0))
+	return Right(round(sum(red)/26))
 
 def	jxM210(red,blue):
-	return Right(round(sum(red)/27,0))
+	return Right(round(sum(red)/27))
 
 def	jxM211(red,blue):
-	return Right(round(sum(red)/28,0))
+	return Right(round(sum(red)/28))
 
 def	jxM212(red,blue):
-	return Right(round(sum(red)/29,0))
+	return Right(round(sum(red)/29))
 
 def	jxM213(red,blue):
-	return Right(round(sum(red)/30,0))
+	return Right(round(sum(red)/30))
 
 def	jxM214(red,blue):
-	return Right(round(sum(red)/31,0))
+	return Right(round(sum(red)/31))
 
 def	jxM215(red,blue):
-	return Right(round(sum(red)/32,0))
+	return Right(round(sum(red)/32))
 
 def	jxM216(red,blue):
-	return Right(round(sum(red)/33,0))
+	return Right(round(sum(red)/33))
 
 def	jxM217(red,blue):
-	return Right(round(sum(red)/34,0))
+	return Right(round(sum(red)/34))
 
 def	jxM218(red,blue):
-	return Right(round(sum(red)/40,0))
+	return Right(round(sum(red)/40))
 
 

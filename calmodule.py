@@ -1,30 +1,44 @@
 from MyMongo import *
 from calfunc import *
 from LuckyNum import *
+import time
 
 class calModule():
     __modb = myDb()
-    def __init__(self):
+    def __init__(self,page):
         self.termData = []
+        self.__pageID = page
 
-
+    def getTermDataRight(self,data):
+        res = []
+        for d in data:
+            res.append(Right(d))
+        return res
 
     def fillTermData(self,scope):
         datas = self.__modb.getTermDatas(scope)
         for data in datas:
-            self.groupCal(1,6,data)
+            self.groupCal(self.__pageID,1,216,data)
 
-    def groupCal(self,funcStart,funcEnd,termdata):
+    def groupCal(self,pageID,funcStart,funcEnd,termdata):
         calRes = luckyNum()
-        calRes.groupID = funcStart / 7
+        calRes.moduleID = pageID
+        groupNum = int(funcEnd / 6)
         calRes.termID = termdata['termID']
         red = list(map(int,termdata['red']))
         blue = int(termdata['blue'])
-        calRes.num = self.calFuncByGroup(funcStart,funcEnd,red,blue)
-        print(calRes.num)
-        calRes.num = list(set(calRes.num))
-        print(calRes.num,len(calRes.num))
-        calRes.numSize = len(calRes.num)
+        termRightData = self.getTermDataRight(termdata['red'])
+        termRightData = list(map(int, termRightData))
+        onePageNum = self.calFuncByGroup(funcStart,funcEnd,red,blue)
+        for g in range(groupNum):
+            calRes.groupID = g+1
+            calRes.num = onePageNum[g*6:(g+1)*6]
+            calRes.numSize = len(list(set(calRes.num)))
+            calRes.rightNum = 0
+            for val in termRightData:
+                if val in list(set(calRes.num)):
+                    calRes.rightNum += 1
+            print(calRes.termID,calRes.moduleID,calRes.groupID,calRes.num,calRes.rightNum, calRes.numSize,calRes.last)
 
 
     def calFuncByGroup(self,funcStart,funcEnd,red,blue):
@@ -35,5 +49,8 @@ class calModule():
 
 
 if __name__ == '__main__':
-    calmod = calModule()
-    calmod.fillTermData(1)
+    start = time.clock()
+    calmod = calModule(1)
+    calmod.fillTermData(100)
+    end = time.clock()
+    print("计算时间为：",end-start)
