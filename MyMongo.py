@@ -17,10 +17,11 @@ class myDb:
 
     def createTerm(self,col):
         if col.count() > 10 :
-            print('is not here')
+            print('--------------------------------')
             return;
         else:
             #fill TermTable from network
+            print('11111111111111111111111111111111')
             termlist = self.getAllTerm()
             print(termlist)
             col.insert(termlist)
@@ -48,7 +49,7 @@ class myDb:
             return terms
 
     def getTermDatas(self,scope):
-        datas = self.tterm.find().sort("termID",-1).limit(scope)
+        datas = self.tterm.find().sort("termID",-1).limit(scope+1)
         result = []
         for data in datas:
             result.append(data)
@@ -61,8 +62,6 @@ if __name__ == '__main__':
     for data in db.getTermDatas(5):
         print(data['red'],data['blue'])
 
-    dd=db.tterm.find_one({'termID':'2019137'})
-    print(dd)
 
 
 

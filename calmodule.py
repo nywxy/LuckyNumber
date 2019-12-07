@@ -19,28 +19,28 @@ class calModule():
     def fillTermData(self,scope):
         datas = self.__modb.getTermDatas(scope)
         for index in range(len(datas)):
-            print(datas[index]['termID'],index)
-            print(datas[index]['red'], index)
-        #     if index == len(datas):
-        #         self.termDataUnkonw.termID = str(int(datas[index]['termID'])+1)
-        #         self.groupCal(self.__pageID,1,2,self.termDataUnkonw,datas[index])
-        #     else:
-        #         self.groupCal(self.__pageID,1,2,datas[index],datas[index+1])
+            if index > 1:
+                self.groupCal(self.__pageID,1,216,datas[index],datas[index-1])
 
-    #termdata应该为上期开奖的数据
-    #resultdata为本期开奖结果
+
+    #termdata应该为本期未开奖的数据
+    #resultdata为上期开奖结果
     def groupCal(self,pageID,funcStart,funcEnd,termdata,resultdata):
-        print(termdata['termID'],resultdata['termID'])
-        calRes = luckyNum()
-        calRes.moduleID = pageID
         groupNum = int(funcEnd / 6)
-        calRes.termID = termdata['termID']
-        red = list(map(int,termdata['red']))
-        blue = int(termdata['blue'])
+        red = list(map(int, resultdata['red']))
+        blue = int(resultdata['blue'])
         termRightData = self.getTermDataRight(resultdata['red'])
-        termRightData = list(map(int, termRightData))
-        onePageNum = self.calFuncByGroup(funcStart,funcEnd,red,blue)
+
+        # 开奖号码位数去重
+        termRightData = list(set(map(int, termRightData)))
+        # 开奖号码不去重
+        # termRightData = list(map(int, termRightData))
+
+        onePageNum = self.calFuncByGroup(funcStart, funcEnd, red, blue)
         for g in range(groupNum):
+            calRes = luckyNum()
+            calRes.moduleID = pageID
+            calRes.termID = termdata['termID']
             calRes.groupID = g+1
             calRes.num = onePageNum[g*6:(g+1)*6]
             calRes.numSize = len(list(set(calRes.num)))
@@ -48,8 +48,8 @@ class calModule():
             for val in termRightData:
                 if val in list(set(calRes.num)):
                     calRes.rightNum += 1
-            print(calRes.termID,calRes.moduleID,calRes.groupID,calRes.num,calRes.rightNum, calRes.numSize,calRes.last)
-
+            #print(calRes.termID,calRes.moduleID,calRes.groupID,red,termRightData,calRes.num,calRes.rightNum, calRes.numSize,calRes.last)
+            self.__modb.tlucky.insert(calRes.__dict__)
 
     def calFuncByGroup(self,funcStart,funcEnd,red,blue):
         result = []
@@ -61,6 +61,6 @@ class calModule():
 if __name__ == '__main__':
     start = time.clock()
     calmod = calModule(1)
-    calmod.fillTermData(5)
+    calmod.fillTermData(100)
     end = time.clock()
     print("计算时间为：",end-start)

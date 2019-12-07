@@ -3,7 +3,8 @@ class luckyNum:
         self.termID = '2019001'
         self.moduleID = 0
         self.groupID = 0
-        self.last = 999
+        self.last65 = -1
+        self.last55 = -1
         self.num = []
         self.numSize = 0
         self.rightNum = -1

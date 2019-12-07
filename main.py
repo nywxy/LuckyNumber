@@ -2,12 +2,11 @@ import sys
 from jxluckywindow import *
 from PyQt5.QtWidgets import QApplication
 
-from dataoption import *
+from MyMongo import *
 
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    db = dbase()
-    print(db.getAllData("termtable")[:10])
+    db = myDb()
     mainWnd = JxLucky()
     sys.exit(app.exec_())
