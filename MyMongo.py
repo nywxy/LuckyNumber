@@ -1,7 +1,7 @@
 import pymongo
 import urllib.request
-from calfunc import *
 from LuckyNum import *
+import time
 
 class myDb:
     def __init__(self):
@@ -15,18 +15,16 @@ class myDb:
         self.tlucky = self.db['LuckyTable']
 
 
+    #数据初始化操作，使用过程中无需执行
     def createTerm(self,col):
         if col.count() > 10 :
-            print('--------------------------------')
+            print('开奖记录已有数据，不再初始化')
             return;
         else:
             #fill TermTable from network
-            print('11111111111111111111111111111111')
             termlist = self.getAllTerm()
             print(termlist)
             col.insert(termlist)
-            for x in col.find():
-                print(x)
 
     def getAllTerm(self,url="http://www.17500.cn/getData/ssq.TXT"):
         page = urllib.request.urlopen(url)
@@ -42,8 +40,8 @@ class myDb:
                 di = d.split(" ")
                 termdata = term()
                 termdata.termID = di[0]
-                termdata.red = di[2:8]
-                termdata.blue = di[8]
+                termdata.red = list(map(int,di[2:8]))
+                termdata.blue = int(di[8])
                 terms.append(termdata.__dict__)
         finally:
             return terms
@@ -56,12 +54,18 @@ class myDb:
         result.sort(key=lambda x:x['termID'])
         return result
 
+    def getAllLuckyNum(self):
+        luckynums = self.tlucky.find()
+        for lucky in luckynums:
+            print(lucky)
+        return  luckynums
+
 
 if __name__ == '__main__':
+    start = time.clock()
     db = myDb()
-    for data in db.getTermDatas(5):
-        print(data['red'],data['blue'])
-
-
-
+    lucky = db.getAllLuckyNum()
+    end = time.clock()
+    print("数据条数：",lucky.count())
+    print("查询所有数据时间为：", end - start)
 
