@@ -18,14 +18,15 @@ class calModule():
 
     def fillTermData(self,scope):
         datas = self.__modb.getTermDatas(scope)
-        datacount = datas.count(with_limit_and_skip=True)
-        for index in range(datacount+1):
-            print(datas[index]['termID'],index)
-            if index == datacount:
-                self.termDataUnkonw.termID = str(int(datas[index]['termID'])+1)
-                self.groupCal(self.__pageID,1,2,self.termDataUnkonw,datas[index])
-            else:
-                self.groupCal(self.__pageID,1,2,datas[index],datas[index+1])
+        print(datas)
+        print(len(datas))
+        # for index in range(len(datas)+1):
+        #     print(datas[index]['termID'],index)
+        #     if index == len(datas):
+        #         self.termDataUnkonw.termID = str(int(datas[index]['termID'])+1)
+        #         self.groupCal(self.__pageID,1,2,self.termDataUnkonw,datas[index])
+        #     else:
+        #         self.groupCal(self.__pageID,1,2,datas[index],datas[index+1])
 
     #termdata应该为上期开奖的数据
     #resultdata为本期开奖结果
