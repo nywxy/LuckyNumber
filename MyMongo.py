@@ -48,9 +48,12 @@ class myDb:
             return terms
 
     def getTermDatas(self,scope):
-        print("-------------------------")
         datas = self.tterm.find().sort("termID",-1).limit(scope)
-        return datas
+        result = []
+        for data in datas:
+            result.append(data)
+        result.sort(key=lambda x:x['termID'])
+        return result
 
 
 # if __name__ == '__main__':
