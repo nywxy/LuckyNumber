@@ -48,8 +48,12 @@ class calModule():
             for val in termRightData:
                 if val in list(set(calRes.num)):
                     calRes.rightNum += 1
-            #print(calRes.termID,calRes.moduleID,calRes.groupID,red,termRightData,calRes.num,calRes.rightNum, calRes.numSize,calRes.last)
-            self.__modb.tlucky.insert(calRes.__dict__)
+            #将号码数据插入到数据库中
+            if self.__modb.tlucky.find({'termID':calRes.termID,'moduleID':calRes.moduleID,'groupID':calRes.groupID}).count() == 0:
+                self.__modb.tlucky.insert(calRes.__dict__)
+            # else:
+            #     更新数据
+
 
     def calFuncByGroup(self,funcStart,funcEnd,red,blue):
         result = []
