@@ -56,10 +56,13 @@ class myDb:
         return result
 
 
-# if __name__ == '__main__':
-#     db = myDb()
-#     for data in db.getTermDatas(5):
-#         print(data['red'],data['blue'])
+if __name__ == '__main__':
+    db = myDb()
+    for data in db.getTermDatas(5):
+        print(data['red'],data['blue'])
+
+    dd=db.tterm.find_one({'termID':'2019137'})
+    print(dd)
 
 
 

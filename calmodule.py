@@ -18,10 +18,9 @@ class calModule():
 
     def fillTermData(self,scope):
         datas = self.__modb.getTermDatas(scope)
-        print(datas)
-        print(len(datas))
-        # for index in range(len(datas)+1):
-        #     print(datas[index]['termID'],index)
+        for index in range(len(datas)):
+            print(datas[index]['termID'],index)
+            print(datas[index]['red'], index)
         #     if index == len(datas):
         #         self.termDataUnkonw.termID = str(int(datas[index]['termID'])+1)
         #         self.groupCal(self.__pageID,1,2,self.termDataUnkonw,datas[index])
