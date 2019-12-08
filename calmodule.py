@@ -45,10 +45,12 @@ class calModule():
         # 开奖号码尾数去重
         termRightData = list(set(termRightData))
         for g in range(groupNum):
+            #概率性数据集表
             calRes = luckyNum()
             calRes.moduleID = page
             calRes.termID = termdata['termID']
             calRes.groupID = g+1
+            calRes.dataID = calRes.termID+'{:0>3d}{:0>3d}'.format(calRes.moduleID,calRes.groupID)
             calRes.num = onePageNum[g * 6:(g + 1) * 6]
             calRes.numSize = len(list(set(calRes.num)))
             calRes.rightNum = 0
@@ -56,6 +58,13 @@ class calModule():
                 if val in list(set(calRes.num)):
                     calRes.rightNum += 1
             pageData.append(calRes.__dict__)
+            #数据概率周期表
+            if calRes.numSize >= 5 and (calRes.rightNum >=5 or calRes.rightNum ==0):
+                dataIn = dataInterval()
+                dataIn.dataID = calRes.dataID
+                dataIn.numSize = calRes.numSize
+                dataIn.rightNum = calRes.rightNum
+                self.__modb.tinterval.insert(dataIn.__dict__)
         return pageData
 
 

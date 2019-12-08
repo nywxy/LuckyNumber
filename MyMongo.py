@@ -13,6 +13,7 @@ class myDb:
         #if there is no data in TermTable,get data from internet and insert them
         self.createTerm(self.tterm)
         self.tlucky = self.db['LuckyTable']
+        self.tinterval = self.db['DataInterval']
 
 
     #数据初始化操作，使用过程中无需执行
