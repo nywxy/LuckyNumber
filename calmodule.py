@@ -82,9 +82,9 @@ class calModule():
                                              'rightNum':dataIn['rightNum']}).sort('dataID')
         if datas.count() > 0:
             print('---------------------')
-            print(datas.count())
+            print(dataIn['moduleID'],dataIn['groupID'],dataIn['rightNum'],dataIn['numSize'])
             for x in datas:
-                print(x['termID'])
+                print(dataIn['moduleID'],dataIn['groupID'],x['termID'],x['rightNum'],x['numSize'])
 
     def __calFuncByGroup(self,funcStart,funcEnd,red,blue):
         result = []
@@ -98,13 +98,13 @@ def fillOnePage(page):
     lock.acquire()
     try:
         calmod = calModule(page + 1)
-        # calmod.fillTermData(100)
+        calmod.fillTermData(200)
     finally:
         lock.release()
 
 if __name__ == '__main__':
     start = time.clock()
-    for page in range(2):
+    for page in range(34):
         T1 = threading.Thread(target=fillOnePage,args=(page,))
         T1.start()
         T1.join()
