@@ -2,6 +2,7 @@ from MyMongo import *
 from calfunc import *
 from LuckyNum import *
 import time
+import threading
 
 class calModule():
     __modb = myDb()
@@ -16,17 +17,15 @@ class calModule():
             res.append(Right(d))
         return res
 
-    #数据库初始化为空时才执行此函数
+    #数据库初始化为空时才执行此函数，一般就调用一次
     def fillTermData(self,scope):
         datas = self.__modb.getTermDatas(scope)
         if self.__pageID > 1 and self.__pageID < 34:
             for data in datas:
-                print(data['red'])
                 for index in range(len(data['red'])):
                     data['red'][index] += self.__pageID
                     if data['red'][index] > 33:
                         data['red'][index] -= 33
-                print(data['red'])
 
         for index in range(len(datas)):
             if index > 1:
@@ -50,22 +49,13 @@ class calModule():
             calRes.moduleID = page
             calRes.termID = termdata['termID']
             calRes.groupID = g+1
-            #将号码数据插入到数据库中
-            start = time.clock()
-            if self.__modb.tlucky.find({'termID':calRes.termID,'moduleID':calRes.moduleID,'groupID':calRes.groupID}).count() == 0:
-                # self.__modb.tlucky.insert(calRes.__dict__)
-                #生成初始化大量数据时，由于单个数据插入时间过长，故一页数据计算完毕后整体插入到数据库
-                calRes.num = onePageNum[g * 6:(g + 1) * 6]
-                calRes.numSize = len(list(set(calRes.num)))
-                calRes.rightNum = 0
-                for val in termRightData:
-                    if val in list(set(calRes.num)):
-                        calRes.rightNum += 1
-                pageData.append((calRes.__dict__))
-            # else:
-            #     更新数据，更新数据时单条单条更新
-            end = time.clock()
-            print("条件查找时间为：", end - start)
+            calRes.num = onePageNum[g * 6:(g + 1) * 6]
+            calRes.numSize = len(list(set(calRes.num)))
+            calRes.rightNum = 0
+            for val in termRightData:
+                if val in list(set(calRes.num)):
+                    calRes.rightNum += 1
+            pageData.append(calRes.__dict__)
         return pageData
 
 
@@ -75,11 +65,21 @@ class calModule():
             result.append(eval("jxM%d"%x)(red,blue))
         return result
 
+lock = threading.Lock()
+
+def fillOnePage(page):
+    lock.acquire()
+    try:
+        calmod = calModule(page + 1)
+        calmod.fillTermData(100)
+    finally:
+        lock.release()
 
 if __name__ == '__main__':
     start = time.clock()
-    for page in range(3):
-        calmod = calModule(page+1)
-        calmod.fillTermData(100)
+    for page in range(34):
+        T1 = threading.Thread(target=fillOnePage,args=(page,))
+        T1.start()
+        T1.join()
     end = time.clock()
     print("计算时间为：",end-start)
