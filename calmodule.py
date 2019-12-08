@@ -62,11 +62,29 @@ class calModule():
             if calRes.numSize >= 5 and (calRes.rightNum >=5 or calRes.rightNum ==0):
                 dataIn = dataInterval()
                 dataIn.dataID = calRes.dataID
+                dataIn.termID = calRes.termID
+                dataIn.moduleID = calRes.moduleID
+                dataIn.groupID = calRes.groupID
                 dataIn.numSize = calRes.numSize
                 dataIn.rightNum = calRes.rightNum
                 self.__modb.tinterval.insert(dataIn.__dict__)
         return pageData
 
+    @classmethod
+    def getAllDataInterval(cls):
+        return cls.__modb.tinterval.find().sort('dataID')
+
+    @classmethod
+    def updateInterval(cls,dataIn):
+        datas = cls.__modb.tinterval.find({'moduleID':dataIn['moduleID'],
+                                             'groupID':dataIn['groupID'],
+                                             'numSize':dataIn['numSize'],
+                                             'rightNum':dataIn['rightNum']}).sort('dataID')
+        if datas.count() > 0:
+            print('---------------------')
+            print(datas.count())
+            for x in datas:
+                print(x['termID'])
 
     def __calFuncByGroup(self,funcStart,funcEnd,red,blue):
         result = []
@@ -80,15 +98,18 @@ def fillOnePage(page):
     lock.acquire()
     try:
         calmod = calModule(page + 1)
-        calmod.fillTermData(100)
+        # calmod.fillTermData(100)
     finally:
         lock.release()
 
 if __name__ == '__main__':
     start = time.clock()
-    for page in range(34):
+    for page in range(2):
         T1 = threading.Thread(target=fillOnePage,args=(page,))
         T1.start()
         T1.join()
     end = time.clock()
+    for x in calModule.getAllDataInterval():
+        calModule.updateInterval(x)
     print("计算时间为：",end-start)
+

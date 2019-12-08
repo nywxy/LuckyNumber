@@ -20,6 +20,9 @@ class term:
 class dataInterval:
     def __init__(self):
         self.dataID = '2001001001001'
+        self.termID = '2019001'
+        self.moduleID = 0
+        self.groupID = 0
         self.numSize = -1
         self.rightNum = -1
         self.last65 = -1
