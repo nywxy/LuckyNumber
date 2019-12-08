@@ -2,6 +2,7 @@ import pymongo
 import urllib.request
 from LuckyNum import *
 import time
+import time
 
 class myDb:
     def __init__(self):
@@ -11,29 +12,47 @@ class myDb:
         #connect to TermTable
         self.tterm = self.db['TermTable']
         #if there is no data in TermTable,get data from internet and insert them
-        self.createTerm(self.tterm)
         self.tlucky = self.db['LuckyTable']
         self.tinterval = self.db['DataInterval']
 
+        self.__updateInfo = []
 
-    #数据初始化操作，使用过程中无需执行
-    def createTerm(self,col):
-        if col.count() > 10 :
+    def getUpdateInfo(self):
+        return self.__updateInfo
+
+    #创建或更新开奖记录表
+    def createOrUpdateTermTable(self):
+        #首先从网络上下载最新的开奖信息表
+        termlist = self.__getAllTerm()
+        #然后看数据库中是否有数据，
+        #没有数据的话就创建表并填充数据
+        if self.tterm.count() == 0 :
+            print('正在生成开奖信息表........')
+            start = time.clock()
+            self.tterm.insert(termlist)
+            end = time.clock()
+            print('生成开奖信息数据完毕，用时:',end-start)
+        else:
+            #已经生成过开奖数据的话，就根据数据库中的最后一条数据与下载的最新数据进行比对，如果期数一致
+            #则退出，否则就提示更新，并自动进行更新
+
+    #创建开奖记录表
+    def createTerm(self):
+        if self.tterm.count() > 10 :
             print('开奖记录已有数据，不再初始化')
-            return;
+            return
         else:
             #fill TermTable from network
-            termlist = self.getAllTerm()
-            print(termlist)
-            col.insert(termlist)
+            termlist = self.__getAllTerm()
+            self.tterm.insert(termlist)
 
-    def getAllTerm(self,url="http://www.17500.cn/getData/ssq.TXT"):
+    def __getAllTerm(self,url="http://www.17500.cn/getData/ssq.TXT"):
         page = urllib.request.urlopen(url)
         html = page.read()
         data = html.decode('utf-8')
-        return self.str2term(data)
+        return self.__str2term(data)
 
-    def str2term(self, data):
+    def __str2term(self, data):
         datas = data.split("\n")
         terms = []
         try:
@@ -59,14 +78,9 @@ class myDb:
         luckynums = self.tlucky.find()
         for lucky in luckynums:
             print(lucky)
-        return  luckynums
+        return luckynums
 
+    def getAllDataInterval(self):
+        return self.tinterval.find().sort('dataID')
 
-if __name__ == '__main__':
-    start = time.clock()
-    db = myDb()
-    lucky = db.getAllLuckyNum()
-    end = time.clock()
-    print("数据条数：",lucky.count())
-    print("查询所有数据时间为：", end - start)
 

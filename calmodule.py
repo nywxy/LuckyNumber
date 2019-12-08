@@ -6,10 +6,39 @@ import threading
 
 class calModule():
     __modb = myDb()
-    def __init__(self,page):
+    def __init__(self):
         self.termData = []
         self.termDataUnkonw = luckyNum()
-        self.__pageID = page
+
+        self.__page = 0   #生成多少页数据
+        self.__scope = 0  #生成多少期数据
+        self.__intervalThreshold = 10 #查找间隔阈值
+
+    def getIntervalThreshold(self):
+        return self.__intervalThreshold
+
+    def getPageCount(self):
+        return self.__page
+
+    def getScope(self):
+        return self.__scope
+
+    def setIntervalThreshold(self,val):
+        self.__intervalThreshold = val
+
+    def setPageCount(self,val):
+        self.__page = val
+
+    def setScope(self,val):
+        self.__scope = val
+
+    #初始化数据库，包括生成开奖信息表，概率计算表和初始化概算数据间隔表
+    def initData(self,page,scope):
+        self.__page = page
+        self.__scope = scope
+
+        #首先生成TermTable中的数据
+
 
     def __getTermDataRight(self,data):
         res = []
@@ -18,18 +47,18 @@ class calModule():
         return res
 
     #数据库初始化为空时才执行此函数，一般就调用一次
-    def fillTermData(self,scope):
+    def __fillTermData(self,scope,page):
         datas = self.__modb.getTermDatas(scope)
-        if self.__pageID > 1 and self.__pageID < 34:
+        if page > 1 and page < 34:
             for data in datas:
                 for index in range(len(data['red'])):
-                    data['red'][index] += self.__pageID
+                    data['red'][index] += page
                     if data['red'][index] > 33:
                         data['red'][index] -= 33
 
         for index in range(len(datas)):
             if index > 1:
-                pageData = self.__groupCal(self.__pageID,1,216,datas[index],datas[index-1])
+                pageData = self.__groupCal(page,1,216,datas[index],datas[index-1])
                 if len(pageData)>0:
                     self.__modb.tlucky.insert(pageData)
 
@@ -72,7 +101,7 @@ class calModule():
 
     @classmethod
     def getAllDataInterval(cls):
-        return cls.__modb.tinterval.find().sort('dataID')
+        return cls.__modb.getAllDataInterval()
 
     @classmethod
     def updateInterval(cls,dataIn):
@@ -81,10 +110,26 @@ class calModule():
                                              'numSize':dataIn['numSize'],
                                              'rightNum':dataIn['rightNum']}).sort('dataID')
         if datas.count() > 0:
-            print('---------------------')
-            print(dataIn['moduleID'],dataIn['groupID'],dataIn['rightNum'],dataIn['numSize'])
-            for x in datas:
-                print(dataIn['moduleID'],dataIn['groupID'],x['termID'],x['rightNum'],x['numSize'])
+            mod = []
+            for data in datas:
+                mod.append(data)
+            #计算周期间隔
+            #最早一个数据的周期间隔不计算，为9999
+            for index in range(len(mod)):
+                if mod[index]['last66']!=-1 or mod[index]['last65']!=-1 or mod[index]['last60']!=-1 or  mod[index]['last55'] != -1 or mod[index]['last50']!=-1 :
+                    print('-------------------------------------')
+                    continue
+                else:
+                    if index == 0:
+                        mod[index]['last%d%d'%(mod[index]['numSize'],mod[index]['rightNum'])] = 9999
+                    elif index > 0:
+                        mod[index]['last%d%d' % (mod[index]['numSize'],mod[index]['rightNum'])] = \
+                            int(mod[index]['termID']) - int(mod[index-1]['termID'])
+
+                    cls.__modb.tinterval.update({'dataID':mod[index]['dataID']},
+                                                {'$set':{'last%d%d'%(mod[index]['numSize'],
+                                                         mod[index]['rightNum']):mod[index]['last%d%d' % (
+                                                         mod[index]['numSize'], mod[index]['rightNum'])]}})
 
     def __calFuncByGroup(self,funcStart,funcEnd,red,blue):
         result = []
@@ -98,7 +143,7 @@ def fillOnePage(page):
     lock.acquire()
     try:
         calmod = calModule(page + 1)
-        calmod.fillTermData(200)
+        # calmod.fillTermData(200)
     finally:
         lock.release()
 
@@ -108,8 +153,8 @@ if __name__ == '__main__':
         T1 = threading.Thread(target=fillOnePage,args=(page,))
         T1.start()
         T1.join()
-    end = time.clock()
     for x in calModule.getAllDataInterval():
         calModule.updateInterval(x)
+    end = time.clock()
     print("计算时间为：",end-start)
 

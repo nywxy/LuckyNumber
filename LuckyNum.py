@@ -25,5 +25,8 @@ class dataInterval:
         self.groupID = 0
         self.numSize = -1
         self.rightNum = -1
+        self.last66 = -1
         self.last65 = -1
         self.last55 = -1
+        self.last60 = -1
+        self.last50 = -1
