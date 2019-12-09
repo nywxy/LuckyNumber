@@ -1,8 +1,17 @@
 import pymongo
 import urllib.request
 from LuckyNum import *
+from calfunc import *
 import time
-import time
+
+#-----------------获取数据个位-------------------------------
+#data为列表，返回列表数据元素的个位
+def getDatasRight(data):
+    res = []
+    for d in data:
+        res.append(Right(d))
+    return res
+
 
 class myDb:
     def __init__(self):
@@ -15,43 +24,105 @@ class myDb:
         self.tlucky = self.db['LuckyTable']
         self.tinterval = self.db['DataInterval']
 
+        #最新开奖信息表
+        self.__termlist = []
+        self.isUpdate = False
+        self.isOnline = True
+
+        #待更新的开奖信息列表
         self.__updateInfo = []
+        #计算函数起始信息，每页计算出来多少组数，主要根据这两个值确定，结束应为6的倍数
+        self.__funcStart = 1
+        self.__funcEnd = 216
+
+        #程序初始化时需要先获取最新数据信息，如果获取不到就用以往数据
+        self.getLastestTermData()
+        if self.__termlist.__len__() < 1:
+            print("获取最新数据失败，启用离线模式")
+            self.isOnline = False
 
     def getUpdateInfo(self):
         return self.__updateInfo
 
-    #创建或更新开奖记录表
-    def createOrUpdateTermTable(self):
+    def getFuncStart(self):
+        return self.__funcStart
+
+    def getFuncEnd(self):
+        return self.__funcEnd
+
+    def setFuncStart(self,val):
+        self.__funcStart = val
+
+    def setFuncEnd(self,val):
+        self.__funcEnd = val
+
+    #删除开奖记录表数据
+    def clearTermTable(self):
+        self.tterm.remove({})
+
+    #删除计算表
+    def clearLuckyTable(self):
+        self.tlucky.remove({})
+
+    #删除概率周期表
+    def clearDataInterval(self):
+        self.tinterval.remove({})
+
+    def getLastestTermData(self):
+        self.__termlist = self.__getAllTerm()
+
+    #-------------------开奖记录表相关------------------------------------
+    #创建开奖记录表
+    def createTermTable(self):
         #首先从网络上下载最新的开奖信息表
-        termlist = self.__getAllTerm()
         #然后看数据库中是否有数据，
         #没有数据的话就创建表并填充数据
         if self.tterm.count() == 0 :
+            if self.isOnline == False:
+                print("无法使用缓存数据，请连接网络更新后再试！")
+                return
             print('正在生成开奖信息表........')
             start = time.clock()
-            self.tterm.insert(termlist)
+            self.tterm.insert(self.__termlist)
             end = time.clock()
             print('生成开奖信息数据完毕，用时:',end-start)
         else:
-            #已经生成过开奖数据的话，就根据数据库中的最后一条数据与下载的最新数据进行比对，如果期数一致
-            #则退出，否则就提示更新，并自动进行更新
+            if self.isOnline:
+                self.isUpdate = True
 
-    #创建开奖记录表
-    def createTerm(self):
-        if self.tterm.count() > 10 :
-            print('开奖记录已有数据，不再初始化')
-            return
-        else:
-            #fill TermTable from network
-            termlist = self.__getAllTerm()
-            self.tterm.insert(termlist)
 
+    #更新开奖信息表
+    def updataTermTable(self):
+        if self.isUpdate:
+            # 已经生成过开奖数据的话，就根据数据库中的最后一条数据与下载的最新数据进行比对，如果期数一致
+            # 则退出，否则就提示更新，并自动进行更新
+            dblastest = self.tterm.find().sort('termID', -1).limit(1)
+            if dblastest['termID'] == self.__termlist[len(self.__termlist) - 1]:
+                print("数据已是最新，无需更新")
+            else:
+                for index in range(len(self.__termlist)):
+                    # 为快速查找到需更新的数据，termlist要倒着查
+                    self.__termlist.reverse()
+                    if self.__termlist[index]['termID'] != dblastest['termID']:
+                        self.__updateInfo.append(self.__termlist[index])
+                    else:
+                        break
+                if self.__updateInfo.__len__() > 0:
+                    print("开始更新数据......")
+                    start = time.clock()
+                    self.tterm.insert(self.__updateInfo.__dict__)
+                    end = time.clock()
+                    self.isUpdate = False
+                    print("数据更新完成，用时：", end - start)
+
+    #从网站上获取所有的开奖数据
     def __getAllTerm(self,url="http://www.17500.cn/getData/ssq.TXT"):
         page = urllib.request.urlopen(url)
         html = page.read()
         data = html.decode('utf-8')
         return self.__str2term(data)
 
+    #获取到的开奖数据转换成开奖信息列表
     def __str2term(self, data):
         datas = data.split("\n")
         terms = []
@@ -66,6 +137,8 @@ class myDb:
         finally:
             return terms
 
+    #获取数据库中开奖数据
+    #scope为开奖的期数，取多少期的数据
     def getTermDatas(self,scope):
         datas = self.tterm.find().sort("termID",-1).limit(scope+1)
         result = []
@@ -74,13 +147,118 @@ class myDb:
         result.sort(key=lambda x:x['termID'])
         return result
 
+
+    #--------------------------概率计算表相关----------------------------
+
+    # 调用函数计算每页所有的数据，并返回
+    def __calFuncByGroup(self,funcStart,funcEnd,red,blue):
+        result = []
+        for x in range(funcStart,funcEnd+1):
+            result.append(eval("jxM%d"%x)(red,blue))
+        return result
+
+
+    # 每组数据计算方法函数，函数在计算过程中可根据计算的数据去重个数及命中结果生成概率周期表的原始数据
+    # page为哪一页
+    # funcStart 计算函数开始为哪个函数
+    # funcEnd 计算函数结束为哪个函数
+    # termdata应该为本期未开奖的数据
+    # resultdata为上期开奖结果
+    # 私有方法，类外不可调用
+    def __groupCal(self, page, funcStart, funcEnd, termdata, resultdata):
+        pageData = []
+        groupNum = int(funcEnd / 6)
+        termRightData = getDatasRight(resultdata['red'])
+        onePageNum = self.__calFuncByGroup(funcStart, funcEnd, resultdata['red'], resultdata['blue'])
+        # 开奖号码尾数去重
+        termRightData = list(set(termRightData))
+        for g in range(groupNum):
+            # 概率性数据集表
+            calRes = luckyNum()
+            calRes.moduleID = page
+            calRes.termID = termdata['termID']
+            calRes.groupID = g + 1
+            calRes.dataID = calRes.termID + '{:0>3d}{:0>3d}'.format(calRes.moduleID, calRes.groupID)
+            calRes.num = onePageNum[g * 6:(g + 1) * 6]
+            calRes.numSize = len(list(set(calRes.num)))
+            calRes.rightNum = 0
+            for val in termRightData:
+                if val in list(set(calRes.num)):
+                    calRes.rightNum += 1
+            pageData.append(calRes.__dict__)
+            # 创建数据概率周期表基本数据
+            # 待基本数据创建完成后周期表再进行自我计算出周期差
+            if calRes.numSize >= 5 and (calRes.rightNum >= 5 or calRes.rightNum == 0):
+                dataIn = dataInterval()
+                dataIn.dataID = calRes.dataID
+                dataIn.termID = calRes.termID
+                dataIn.moduleID = calRes.moduleID
+                dataIn.groupID = calRes.groupID
+                dataIn.numSize = calRes.numSize
+                dataIn.rightNum = calRes.rightNum
+                self.tinterval.insert(dataIn.__dict__)
+        return pageData
+
+    #--------创建表多少期多少页数据-----------------
+    def createLuckyTable(self,scope,page):
+        datas = self.getTermDatas(scope)
+        if len(datas) < 1:
+            print("请先生成开奖信息表！.......")
+            return
+        if page > 1 and page < 34:
+            for data in datas:
+                for index in range(len(data['red'])):
+                    data['red'][index] += page
+                    if data['red'][index] > 33:
+                        data['red'][index] -= 33
+        for index in range(len(datas)):
+            if index > 1:
+                pageData = self.__groupCal(page, self.__funcStart, self.__funcEnd, datas[index], datas[index - 1])
+                if len(pageData) > 0:
+                    self.tlucky.insert(pageData)
+
+
+    #获取所有的计算统计数据
     def getAllLuckyNum(self):
         luckynums = self.tlucky.find()
         for lucky in luckynums:
             print(lucky)
         return luckynums
 
+    #--------------概率周期表相关------------------
+    #表的创建在生成数据表的时候同步进行，本表只存储6中6,6中5,6中0,5中5及5中0的信息
+
     def getAllDataInterval(self):
         return self.tinterval.find().sort('dataID')
 
+    def updateInterval(self,dataIn):
+        datas = self.tinterval.find({'moduleID':dataIn['moduleID'],
+                                             'groupID':dataIn['groupID'],
+                                             'numSize':dataIn['numSize'],
+                                             'rightNum':dataIn['rightNum']}).sort('dataID')
+        if datas.count() > 0:
+            mod = []
+            for data in datas:
+                mod.append(data)
+            #计算周期间隔
+            #最早一个数据的周期间隔不计算，为9999
+            for index in range(len(mod)):
+                #如果计算过周期差的话该条数据将不再计算
+                #一般只有最新加入的数据才没有进行周期差的计算
+                if mod[index]['last66']!=-1 or mod[index]['last65']!=-1 \
+                        or mod[index]['last60']!=-1 or  mod[index]['last55'] != -1 \
+                        or mod[index]['last50']!=-1 :
+                    print('-------------------------------------')
+                    continue
+                else:
+                    if index == 0:
+                        mod[index]['last%d%d'%(mod[index]['numSize'],mod[index]['rightNum'])] = 9999
+                    elif index > 0:
+                        mod[index]['last%d%d' % (mod[index]['numSize'],mod[index]['rightNum'])] = \
+                            int(mod[index]['termID']) - int(mod[index-1]['termID'])
+
+                    self.tinterval.update({'dataID':mod[index]['dataID']},
+                                                {'$set':{'last%d%d'%(mod[index]['numSize'],
+                                                         mod[index]['rightNum']):mod[index]['last%d%d' % (
+                                                         mod[index]['numSize'], mod[index]['rightNum'])]}})
 
