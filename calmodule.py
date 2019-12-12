@@ -107,7 +107,7 @@ class calModule():
             finally:
                 lock.release()
 
-        for p in range(page + 1):
+        for p in range(page):
             T = threading.Thread(target=run, args=(scope, p+1))
             T.start()
             T.join()

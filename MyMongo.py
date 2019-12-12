@@ -217,9 +217,9 @@ class myDb:
             #             data['red'][index] -= 33
             for index in range(len(datas)):
                 for i in range(len(datas[index]['red'])):
-                    datas[index]['red'][i] += page
+                    datas[index]['red'][i] += page-1
                     if datas[index]['red'][i] >33:
-                        datas[index]['red'][i] -= 33;
+                        datas[index]['red'][i] -= 33
         for index in range(len(datas)):
             if index >= 1:
                 pageData = self.__groupCal(page, self.__funcStart, self.__funcEnd, datas[index], datas[index - 1])
