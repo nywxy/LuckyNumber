@@ -181,22 +181,26 @@ class myDb:
             calRes.dataID = calRes.termID + '{:0>3d}{:0>3d}'.format(calRes.moduleID, calRes.groupID)
             calRes.num = onePageNum[g * 6:(g + 1) * 6]
             calRes.numSize = len(list(set(calRes.num)))
-            calRes.rightNum = 0
-            for val in termRightData:
-                if val in list(set(calRes.num)):
-                    calRes.rightNum += 1
+            if termdata['red'] == []:
+                calRes.rightNum = -1
+            else:
+                calRes.rightNum = 0
+                for val in termRightData:
+                    if val in list(set(calRes.num)):
+                        calRes.rightNum += 1
             pageData.append(calRes.__dict__)
             # 创建数据概率周期表基本数据
             # 待基本数据创建完成后周期表再进行自我计算出周期差
-            if calRes.numSize >= 5 and (calRes.rightNum >= 5 or calRes.rightNum == 0):
-                dataIn = dataInterval()
-                dataIn.dataID = calRes.dataID
-                dataIn.termID = calRes.termID
-                dataIn.moduleID = calRes.moduleID
-                dataIn.groupID = calRes.groupID
-                dataIn.numSize = calRes.numSize
-                dataIn.rightNum = calRes.rightNum
-                self.tinterval.insert(dataIn.__dict__)
+            if calRes.numSize >= 5 :
+                if (calRes.rightNum >= 5 or calRes.rightNum == 0) or (termdata['red']==[]):
+                    dataIn = dataInterval()
+                    dataIn.dataID = calRes.dataID
+                    dataIn.termID = calRes.termID
+                    dataIn.moduleID = calRes.moduleID
+                    dataIn.groupID = calRes.groupID
+                    dataIn.numSize = calRes.numSize
+                    dataIn.rightNum = calRes.rightNum
+                    self.tinterval.insert(dataIn.__dict__)
         return pageData
 
     #--------创建表多少期多少页数据-----------------
@@ -206,13 +210,18 @@ class myDb:
             print("请先生成开奖信息表！.......")
             return
         if page > 1 and page < 34:
-            for data in datas:
-                for index in range(len(data['red'])):
-                    data['red'][index] += page
-                    if data['red'][index] > 33:
-                        data['red'][index] -= 33
+            # for data in datas:
+            #     for index in range(len(data['red'])):
+            #         data['red'][index] += page
+            #         if data['red'][index] > 33:
+            #             data['red'][index] -= 33
+            for index in range(len(datas)):
+                for i in range(len(datas[index]['red'])):
+                    datas[index]['red'][i] += page
+                    if datas[index]['red'][i] >33:
+                        datas[index]['red'][i] -= 33;
         for index in range(len(datas)):
-            if index > 1:
+            if index >= 1:
                 pageData = self.__groupCal(page, self.__funcStart, self.__funcEnd, datas[index], datas[index - 1])
                 if len(pageData) > 0:
                     self.tlucky.insert(pageData)
@@ -248,7 +257,6 @@ class myDb:
                 if mod[index]['last66']!=-1 or mod[index]['last65']!=-1 \
                         or mod[index]['last60']!=-1 or  mod[index]['last55'] != -1 \
                         or mod[index]['last50']!=-1 :
-                    print('-------------------------------------')
                     continue
                 else:
                     if index == 0:

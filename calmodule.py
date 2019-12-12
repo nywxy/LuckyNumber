@@ -8,7 +8,6 @@ class calModule():
     __modb = myDb()
     def __init__(self):
         self.updateTermData = []
-        self.termDataUnkonw = luckyNum()
         self.isUpdate = False
         self.__page = 33   #生成多少页数据
         self.__scope = 100  #生成多少期数据
@@ -74,21 +73,7 @@ class calModule():
         self.__modb.clearDataInterval()
         #生成LuckyTable表
         #通过多线程生成
-        print("开始生成统计数据表和概率周期表.......")
-        start = time.clock()
-        lock = threading.Lock()
-        def run(scope,page):
-            lock.acquire()
-            try:
-                self.__modb.createLuckyTable(scope,page)
-            finally:
-                lock.release()
-        for page in range(self.__page+1):
-            T = threading.Thread(target=run,args=(self.__scope,page+1))
-            T.start()
-            T.join()
-        end = time.clock()
-        print("生成统计数据及概率周期表完毕，用时：",end-start)
+        self.createAllLuckyData(self.__scope,self.__page)
 
         print("开始生成概率周期数据")
         start = time.clock()
@@ -97,8 +82,41 @@ class calModule():
         end = time.clock()
         print("生成概率周期数据完毕，用时：",end-start)
 
+    #此方法为已有最新数据后的生成预测，只有再初始化数据或更新数据后可用
+    def createForecastData(self):
+        #生成一个termdata
+        termData = self.__modb.getTermDatas(0)[0]
+        newTerm = term()
+        newTerm.termID = str(int(termData['termID']) +1)
+        newTerm.red = []
+        newTerm.blue = 0
+        #将该数据插入到期数表
+        self.__modb.tterm.insert(newTerm.__dict__)
+        #生成luckynum
+        self.createAllLuckyData(1,self.__page)
+
+    def createAllLuckyData(self,scope,page):
+        print("开始生成预测的统计数据表和概率周期表.......")
+        start = time.clock()
+        lock = threading.Lock()
+
+        def run(scope, page):
+            lock.acquire()
+            try:
+                self.__modb.createLuckyTable(scope, page)
+            finally:
+                lock.release()
+
+        for p in range(page + 1):
+            T = threading.Thread(target=run, args=(scope, p+1))
+            T.start()
+            T.join()
+        end = time.clock()
+        print("生成统计数据及概率周期表完毕，用时：", end - start)
+
 
 
 if __name__ == '__main__':
     test = calModule()
     test.initData(scope=200)
+    test.createForecastData()
