@@ -14,6 +14,7 @@ class calModule():
         self.__intervalThreshold = 10 #查找间隔阈值
         self.__funcStart = 1 #计算函数开始索引
         self.__funcEnd = 216 #计算函数结束索引
+        self.termForcast = ""
 
     #---------------对外接口--------------------------
 
@@ -88,6 +89,7 @@ class calModule():
         termData = self.__modb.getTermDatas(0)[0]
         newTerm = term()
         newTerm.termID = str(int(termData['termID']) +1)
+        self.termForcast = newTerm.termID
         newTerm.red = []
         newTerm.blue = 0
         #将该数据插入到期数表
@@ -114,9 +116,27 @@ class calModule():
         end = time.clock()
         print("生成统计数据及概率周期表完毕，用时：", end - start)
 
+    def getLastOneTermData(self):
+        return self.__modb.getTermDatas(0)[0]
 
+    def getLastOneTermID(self):
+        return self.getLastOneTermData()['termID']
+
+    def getIntervalData(self,condition):
+        return self.__modb.getIntervalDataByCondition(condition)
 
 if __name__ == '__main__':
     test = calModule()
     test.initData(scope=200)
     test.createForecastData()
+    test.termForcast = test.getLastOneTermID()
+    condition = {'termID': test.termForcast}
+    for data in test.getIntervalData(condition):
+        moduleID = data['moduleID']
+        groupID = data['groupID']
+        numSize = data['numSize']
+        #从概算周期表中找出moduleID和groupID相同的项
+        co = {'groupID':groupID,'moduleID':moduleID,'numSize':numSize,
+              'termID':{'$ne':test.termForcast}}
+        for sdata in test.getIntervalData(co):
+            print(sdata)

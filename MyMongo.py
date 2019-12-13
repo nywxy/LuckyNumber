@@ -5,12 +5,36 @@ from calfunc import *
 import time
 
 #-----------------获取数据个位-------------------------------
+#设置每年有多少期的数据
+termEveyYear={
+    '2013':154,
+    '2014':152,
+    '2015':154,
+    '2016':153,
+    '2017':154,
+    '2018':153,
+}
+
+#计算a期与b期之间的期差
+#a期晚于b期
+def countTermSub(aTermID,bTermID):
+    #首先对期数数据进行分割
+    aYear = aTermID[:4]
+    aTerm = aTermID[4:]
+    bYear = bTermID[:4]
+    bTerm = bTermID[4:]
+    iv = 0
+    for i in range(int(aYear)-int(bYear)):
+        iv += termEveyYear[str(int(bYear)+i)]
+    res = int(aTerm)-int(bTerm) +iv
+    return res
 #data为列表，返回列表数据元素的个位
 def getDatasRight(data):
     res = []
     for d in data:
         res.append(Right(d))
     return res
+
 
 
 class myDb:
@@ -263,10 +287,14 @@ class myDb:
                         mod[index]['last%d%d'%(mod[index]['numSize'],mod[index]['rightNum'])] = 9999
                     elif index > 0:
                         mod[index]['last%d%d' % (mod[index]['numSize'],mod[index]['rightNum'])] = \
-                            int(mod[index]['termID']) - int(mod[index-1]['termID'])
+                            countTermSub(mod[index]['termID'],mod[index-1]['termID'])
 
                     self.tinterval.update({'dataID':mod[index]['dataID']},
                                                 {'$set':{'last%d%d'%(mod[index]['numSize'],
                                                          mod[index]['rightNum']):mod[index]['last%d%d' % (
                                                          mod[index]['numSize'], mod[index]['rightNum'])]}})
 
+
+    def getIntervalDataByCondition(self,condition):
+        datas = self.tinterval.find(condition)
+        return datas
