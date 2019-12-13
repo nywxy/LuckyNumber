@@ -248,7 +248,7 @@ class myDb:
             if index >= 1:
                 pageData = self.__groupCal(page, self.__funcStart, self.__funcEnd, datas[index], datas[index - 1])
                 if len(pageData) > 0:
-                    self.tlucky.insert(pageData)
+                    self.tlucky.insert_many(pageData)
 
     # --------创建表多少期多少页数据,包含数据翻滚-----------------
     def createLuckyTableWithZone(self, scope, page,zone):
@@ -267,7 +267,7 @@ class myDb:
             if index >= zone:
                 pageData = self.__groupCal(page+zone*33, self.__funcStart, self.__funcEnd, datas[index], datas[index - zone])
                 if len(pageData) > 0:
-                    self.tlucky.insert(pageData)
+                    self.tlucky.insert_many(pageData)
 
 
 
