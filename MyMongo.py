@@ -252,68 +252,28 @@ class myDb:
 
     # --------创建表多少期多少页数据,包含数据翻滚-----------------
     def createLuckyTableWithZone(self, scope, page,zone):
-        datas = self.getTermDatas(scope)
-        zoneData = datas[zone:]
-        print(zoneData)
+        datas = self.getTermDatas(scope+zone)
         if len(datas) < 1:
             print("请先生成开奖信息表！.......")
             return
+        #每一组里的第一页均为原始值
         if page > 1 and page < 34:
             for index in range(len(datas)):
                 for i in range(len(datas[index]['red'])):
                     datas[index]['red'][i] += page - 1
                     if datas[index]['red'][i] > 33:
                         datas[index]['red'][i] -= 33
-        # for index in range(len(datas)):
-        #     if index >= 1:
-        #         pageData = self.__groupCal(page, self.__funcStart, self.__funcEnd, datas[index], datas[index - 1])
-        #         if len(pageData) > 0:
-        #             self.tlucky.insert(pageData)
+        for index in range(len(datas)):
+            if index >= zone:
+                pageData = self.__groupCal(page+zone*33, self.__funcStart, self.__funcEnd, datas[index], datas[index - zone])
+                if len(pageData) > 0:
+                    self.tlucky.insert(pageData)
 
-    def __groupCalWithZone(self, zone,page, funcStart, funcEnd, termdata, resultdata):
-        pageData = []
-        groupNum = int(funcEnd / 6)
-        termRightData = getDatasRight(resultdata['red'])
-        onePageNum = self.__calFuncByGroup(funcStart, funcEnd, resultdata['red'], resultdata['blue'])
-        # 开奖号码尾数去重
-        termRightData = list(set(termRightData))
-        for g in range(groupNum):
-            # 概率性数据集表
-            calRes = luckyNum()
-            calRes.moduleID = page
-            calRes.termID = termdata['termID']
-            calRes.groupID = g + 1
-            calRes.dataID = calRes.termID + '{:0>3d}{:0>3d}'.format(calRes.moduleID, calRes.groupID)
-            calRes.num = onePageNum[g * 6:(g + 1) * 6]
-            calRes.numSize = len(list(set(calRes.num)))
-            if termdata['red'] == []:
-                calRes.rightNum = -1
-            else:
-                calRes.rightNum = 0
-                for val in termRightData:
-                    if val in list(set(calRes.num)):
-                        calRes.rightNum += 1
-            pageData.append(calRes.__dict__)
-            # 创建数据概率周期表基本数据
-            # 待基本数据创建完成后周期表再进行自我计算出周期差
-            if calRes.numSize >= 5 :
-                if (calRes.rightNum >= 5 or calRes.rightNum == 0) or (termdata['red']==[]):
-                    dataIn = dataInterval()
-                    dataIn.dataID = calRes.dataID
-                    dataIn.termID = calRes.termID
-                    dataIn.moduleID = calRes.moduleID
-                    dataIn.groupID = calRes.groupID
-                    dataIn.numSize = calRes.numSize
-                    dataIn.rightNum = calRes.rightNum
-                    self.tinterval.insert(dataIn.__dict__)
-        return pageData
 
 
     #获取所有的计算统计数据
     def getAllLuckyNum(self):
         luckynums = self.tlucky.find()
-        for lucky in luckynums:
-            print(lucky)
         return luckynums
 
     #--------------概率周期表相关------------------
