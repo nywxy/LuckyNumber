@@ -84,7 +84,7 @@ class calModule():
         end = time.time()
         print("生成概率周期数据完毕，用时：",end-start)
 
-    def initDataWithZone(self,page=33,scope=60,zone=4):
+    def initDataWithZone(self,page=33,scope=100,zone=10):
         self.__page = page
         self.__scope = scope
         self.__zone = zone
@@ -192,11 +192,16 @@ class calModule():
         return self.__modb.tlucky.find(condition)
 
     def saveResultToFile(self,fileName,termID,numSize):
+        datas = []
         with open(fileName, 'w') as f:
             for data in test.getLuckyNumByCondition({'termID': termID}):
                 if data['numSize'] == numSize:
                     lm = list(map(str, set(data['num'])))
-                    f.write("10/" + "~".join(lm) + "/N/0~1~2~3~4/N\r\n")
+                    s = "~".join(lm)
+                    datas.append(s)
+            datas = list(set(datas))
+            for d in datas:
+                f.write("10/" + d + "/N/0~1~2~3~4/N\r\n")
 
 
 if __name__ == '__main__':
