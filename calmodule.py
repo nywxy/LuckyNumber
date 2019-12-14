@@ -84,7 +84,7 @@ class calModule():
         end = time.clock()
         print("生成概率周期数据完毕，用时：",end-start)
 
-    def initDataWithZone(self,page=33,scope=30,zone=3):
+    def initDataWithZone(self,page=33,scope=100,zone=10):
         self.__page = page
         self.__scope = scope
         self.__zone = zone
@@ -147,17 +147,16 @@ class calModule():
         start = time.clock()
         lock = threading.Lock()
 
-        def run(scope, page,zone):
+        def run(scope, curpage,zone,redNum):
             lock.acquire()
             try:
-                self.__modb.createLuckyTableWithZone(scope, page,zone)
+                self.__modb.createLuckyTableWithZone(scope, curpage,zone,redNum)
             finally:
                 lock.release()
-        for z in range(zone):
-            for p in range(page):
-                T = threading.Thread(target=run, args=(scope, p+1,zone+1))
-                T.start()
-                T.join()
+        for p in range(page*zone):
+            T = threading.Thread(target=run, args=(scope, p+1,zone+1,self.__page))
+            T.start()
+            T.join()
         end = time.clock()
         print("生成统计数据及概率周期表完毕，用时：", end - start)
 
@@ -216,6 +215,6 @@ if __name__ == '__main__':
     #     for sdata in test.getIntervalData(co):
     #         print(sdata)
     test.initDataWithZone()
-    test.createForecastDataWithZone()
-    test.termForcast = test.getLastOneTermID()
+    # test.createForecastDataWithZone()
+    # test.termForcast = test.getLastOneTermID()
     test.saveResultToFile("/home/wxy/LuckyNumber/2019143.txt","2019143",5)

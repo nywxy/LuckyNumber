@@ -252,23 +252,29 @@ class myDb:
                     self.tlucky.insert_many(pageData)
 
     # --------创建表多少期多少页数据,包含数据翻滚-----------------
-    def createLuckyTableWithZone(self, scope, page,zone):
+    def createLuckyTableWithZone(self, scope, page,zone,redNum):
         datas = self.getTermDatas(scope+zone)
         if len(datas) < 1:
             print("请先生成开奖信息表！.......")
             return
+        #首先计算出算到第几组了，要不要翻滚上面的数据
+        izone = int((page-1)/redNum)
+        ipage = page%redNum
+        if ipage ==0:
+            ipage = 33
         #每一组里的第一页均为原始值
-        if page > 1 and page < 34:
+        if ipage > 1 and ipage < 34:
             for index in range(len(datas)):
                 for i in range(len(datas[index]['red'])):
-                    datas[index]['red'][i] += page - 1
+                    datas[index]['red'][i] += ipage
                     if datas[index]['red'][i] > 33:
                         datas[index]['red'][i] -= 33
         for index in range(len(datas)):
-            if index >= zone:
-                pageData = self.__groupCal(page+zone*33, self.__funcStart, self.__funcEnd, datas[index], datas[index - zone])
-                if len(pageData) > 0:
-                    self.tlucky.insert_many(pageData)
+            if index >= zone+1:
+                for i in range(zone):
+                    pageData = self.__groupCal(ipage+izone*33, self.__funcStart, self.__funcEnd, datas[index], datas[index - i-1])
+                    if len(pageData) > 0:
+                        self.tlucky.insert_many(pageData)
 
 
 
@@ -293,7 +299,6 @@ class myDb:
             for data in datas:
                 mod.append(data)
 
-            print(mod)
             #计算周期间隔
             #最早一个数据的周期间隔不计算，为9999
             #开线程进行处理
