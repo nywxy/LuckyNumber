@@ -84,7 +84,7 @@ class calModule():
         end = time.time()
         print("生成概率周期数据完毕，用时：",end-start)
 
-    def initDataWithZone(self,page=33,scope=100,zone=10):
+    def initDataWithZone(self,page=33,scope=100,zone=3):
         self.__page = page
         self.__scope = scope
         self.__zone = zone

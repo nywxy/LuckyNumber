@@ -265,7 +265,7 @@ class myDb:
         if ipage ==0:
             ipage = 33
         #每一组里的第一页均为原始值
-        if ipage > 1 and ipage < 34:
+        if ipage > 1 and ipage < 33:
             for index in range(len(datas)):
                 for i in range(len(datas[index]['red'])):
                     datas[index]['red'][i] += ipage
@@ -321,6 +321,8 @@ class myDb:
                                               {'$set': {'last%d%d' % (mod[index]['numSize'],
                                                                       mod[index]['rightNum']): mod[index]['last%d%d' % (
                                                   mod[index]['numSize'], mod[index]['rightNum'])]}})
+                        print("更新：",mod[index]['dataID'],'last%d%d' % (mod[index]['numSize'],mod[index]['rightNum']),
+                              "=", mod[index]['last%d%d' % (mod[index]['numSize'], mod[index]['rightNum'])])
                 finally:
                     lock.release()
             for index in range(len(mod)):
