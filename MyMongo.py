@@ -107,9 +107,9 @@ class myDb:
                 print("无法使用缓存数据，请连接网络更新后再试！")
                 return
             print('正在生成开奖信息表........')
-            start = time.clock()
+            start = time.time()
             self.tterm.insert(self.__termlist)
-            end = time.clock()
+            end = time.time()
             print('生成开奖信息数据完毕，用时:',end-start)
         else:
             if self.isOnline:
@@ -134,9 +134,9 @@ class myDb:
                         break
                 if self.__updateInfo.__len__() > 0:
                     print("开始更新数据......")
-                    start = time.clock()
+                    start = time.time()
                     self.tterm.insert_many(self.__updateInfo.__dict__)
-                    end = time.clock()
+                    end = time.time()
                     self.isUpdate = False
                     print("数据更新完成，用时：", end - start)
 
@@ -273,10 +273,9 @@ class myDb:
                         datas[index]['red'][i] -= 33
         for index in range(len(datas)):
             if index >= zone+1:
-                for i in range(zone):
-                    pageData = self.__groupCal(ipage+izone*33, self.__funcStart, self.__funcEnd, datas[index], datas[index - i-1])
-                    if len(pageData) > 0:
-                        self.tlucky.insert_many(pageData)
+                pageData = self.__groupCal(ipage+izone*33, self.__funcStart, self.__funcEnd, datas[index], datas[index -1])
+                if len(pageData) > 0:
+                    self.tlucky.insert_many(pageData)
 
 
 

@@ -78,13 +78,13 @@ class calModule():
         self.createAllLuckyData(self.__scope,self.__page)
 
         print("开始生成概率周期数据")
-        start = time.clock()
+        start = time.time()
         for data in self.__modb.getAllDataInterval():
             self.__modb.updateInterval(data)
-        end = time.clock()
+        end = time.time()
         print("生成概率周期数据完毕，用时：",end-start)
 
-    def initDataWithZone(self,page=33,scope=30,zone=3):
+    def initDataWithZone(self,page=33,scope=60,zone=4):
         self.__page = page
         self.__scope = scope
         self.__zone = zone
@@ -103,10 +103,10 @@ class calModule():
         self.createAllLuckyDataWithZone(self.__scope,self.__page,zone)
 
         print("开始生成概率周期数据")
-        start = time.clock()
+        start = time.time()
         for data in self.__modb.getAllDataInterval():
             self.__modb.updateInterval(data)
-        end = time.clock()
+        end = time.time()
         print("生成概率周期数据完毕，用时：",end-start)
 
     #此方法为已有最新数据后的生成预测，只有再初始化数据或更新数据后可用
@@ -125,7 +125,7 @@ class calModule():
 
     def createAllLuckyData(self,scope,page):
         print("开始生成预测的统计数据表和概率周期表.......")
-        start = time.clock()
+        start = time.time()
         lock = threading.Lock()
 
         def run(scope, page):
@@ -139,12 +139,12 @@ class calModule():
             T = threading.Thread(target=run, args=(scope, p+1))
             T.start()
             T.join()
-        end = time.clock()
+        end = time.time()
         print("生成统计数据及概率周期表完毕，用时：", end - start)
 
     def createAllLuckyDataWithZone(self,scope,page,zone):
         print("开始生成预测的统计数据表和概率周期表.......")
-        start = time.clock()
+        start = time.time()
         lock = threading.Lock()
 
         def run(scope, curpage,zone,redNum):
@@ -154,25 +154,25 @@ class calModule():
             finally:
                 lock.release()
         for p in range(page*zone):
-            T = threading.Thread(target=run, args=(scope, p+1,zone+1,self.__page))
+            T = threading.Thread(target=run, args=(scope, p+1,zone,self.__page))
             T.start()
             T.join()
-        end = time.clock()
+        end = time.time()
         print("生成统计数据及概率周期表完毕，用时：", end - start)
 
         # 此方法为已有最新数据后的生成预测，只有再初始化数据或更新数据后可用
     def createForecastDataWithZone(self):
-            # 生成一个termdata
-            termData = self.__modb.getTermDatas(0)[0]
-            newTerm = term()
-            newTerm.termID = str(int(termData['termID']) + 1)
-            self.termForcast = newTerm.termID
-            newTerm.red = []
-            newTerm.blue = 0
-            # 将该数据插入到期数表
-            self.__modb.tterm.insert(newTerm.__dict__)
-            # 生成luckynum
-            self.createAllLuckyDataWithZone(1, self.__page,self.__zone)
+        # 生成一个termdata
+        termData = self.__modb.getTermDatas(0)[0]
+        newTerm = term()
+        newTerm.termID = str(int(termData['termID']) + 1)
+        self.termForcast = newTerm.termID
+        newTerm.red = []
+        newTerm.blue = 0
+        # 将该数据插入到期数表
+        self.__modb.tterm.insert(newTerm.__dict__)
+        # 生成luckynum
+        self.createAllLuckyDataWithZone(1, self.__page,self.__zone)
 
     def getLastOneTermData(self):
         return self.__modb.getTermDatas(0)[0]
