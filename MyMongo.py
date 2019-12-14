@@ -3,6 +3,7 @@ import urllib.request
 from LuckyNum import *
 from calfunc import *
 import time
+import threading
 
 #-----------------获取数据个位-------------------------------
 #设置每年有多少期的数据
@@ -134,7 +135,7 @@ class myDb:
                 if self.__updateInfo.__len__() > 0:
                     print("开始更新数据......")
                     start = time.clock()
-                    self.tterm.insert(self.__updateInfo.__dict__)
+                    self.tterm.insert_many(self.__updateInfo.__dict__)
                     end = time.clock()
                     self.isUpdate = False
                     print("数据更新完成，用时：", end - start)
@@ -291,26 +292,53 @@ class myDb:
             mod = []
             for data in datas:
                 mod.append(data)
+
+            print(mod)
             #计算周期间隔
             #最早一个数据的周期间隔不计算，为9999
+            #开线程进行处理
+            lock = threading.Lock()
+            def run(mod,index):
+                lock.acquire()
+                try:
+                    if mod[index]['last66'] != -1 or mod[index]['last65'] != -1 \
+                            or mod[index]['last60'] != -1 or mod[index]['last55'] != -1 \
+                            or mod[index]['last50'] != -1:
+                        return
+                    else:
+                        if index == 0:
+                            mod[index]['last%d%d' % (mod[index]['numSize'], mod[index]['rightNum'])] = 9999
+                        elif index > 0:
+                            mod[index]['last%d%d' % (mod[index]['numSize'], mod[index]['rightNum'])] = \
+                                countTermSub(mod[index]['termID'], mod[index - 1]['termID'])
+                        self.tinterval.update({'dataID': mod[index]['dataID']},
+                                              {'$set': {'last%d%d' % (mod[index]['numSize'],
+                                                                      mod[index]['rightNum']): mod[index]['last%d%d' % (
+                                                  mod[index]['numSize'], mod[index]['rightNum'])]}})
+                finally:
+                    lock.release()
             for index in range(len(mod)):
-                #如果计算过周期差的话该条数据将不再计算
-                #一般只有最新加入的数据才没有进行周期差的计算
-                if mod[index]['last66']!=-1 or mod[index]['last65']!=-1 \
-                        or mod[index]['last60']!=-1 or  mod[index]['last55'] != -1 \
-                        or mod[index]['last50']!=-1 :
-                    continue
-                else:
-                    if index == 0:
-                        mod[index]['last%d%d'%(mod[index]['numSize'],mod[index]['rightNum'])] = 9999
-                    elif index > 0:
-                        mod[index]['last%d%d' % (mod[index]['numSize'],mod[index]['rightNum'])] = \
-                            countTermSub(mod[index]['termID'],mod[index-1]['termID'])
-
-                    self.tinterval.update({'dataID':mod[index]['dataID']},
-                                                {'$set':{'last%d%d'%(mod[index]['numSize'],
-                                                         mod[index]['rightNum']):mod[index]['last%d%d' % (
-                                                         mod[index]['numSize'], mod[index]['rightNum'])]}})
+                T = threading.Thread(target=run,args=(mod,index))
+                T.start()
+                T.join()
+            # for index in range(len(mod)):
+            #     #如果计算过周期差的话该条数据将不再计算
+            #     #一般只有最新加入的数据才没有进行周期差的计算
+            #     if mod[index]['last66']!=-1 or mod[index]['last65']!=-1 \
+            #             or mod[index]['last60']!=-1 or  mod[index]['last55'] != -1 \
+            #             or mod[index]['last50']!=-1 :
+            #         continue
+            #     else:
+            #         if index == 0:
+            #             mod[index]['last%d%d'%(mod[index]['numSize'],mod[index]['rightNum'])] = 9999
+            #         elif index > 0:
+            #             mod[index]['last%d%d' % (mod[index]['numSize'],mod[index]['rightNum'])] = \
+            #                 countTermSub(mod[index]['termID'],mod[index-1]['termID'])
+            #
+            #         self.tinterval.update({'dataID':mod[index]['dataID']},
+            #                                     {'$set':{'last%d%d'%(mod[index]['numSize'],
+            #                                              mod[index]['rightNum']):mod[index]['last%d%d' % (
+            #                                              mod[index]['numSize'], mod[index]['rightNum'])]}})
 
 
     def getIntervalDataByCondition(self,condition):
