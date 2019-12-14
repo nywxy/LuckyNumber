@@ -471,7 +471,7 @@ def	jxM114(red,blue):
     if int(math.pow((red[5]*red[1]*red[2]*red[3]*red[4]),1/4))>66:
         return Right(int(math.pow((red[5]*red[1]*red[2]*red[3]*red[4]),1/4))-66)
     elif int(math.pow((red[5]*red[1]*red[2]*red[3]*red[4]),1/4))>33:
-        return int(math.pow((red[5]*red[1]*red[2]*red[3]*red[4]),1/4))-33
+        return Right(int(math.pow((red[5]*red[1]*red[2]*red[3]*red[4]),1/4))-33)
     else:
         return Right(int(math.pow((red[5]*red[1]*red[2]*red[3]*red[4]),1/4)))
 

@@ -194,7 +194,9 @@ class myDb:
         pageData = []
         groupNum = int(funcEnd / 6)
         termRightData = getDatasRight(resultdata['red'])
+
         onePageNum = self.__calFuncByGroup(funcStart, funcEnd, resultdata['red'], resultdata['blue'])
+
         # 开奖号码尾数去重
         termRightData = list(set(termRightData))
         for g in range(groupNum):
