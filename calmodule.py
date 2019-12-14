@@ -84,7 +84,7 @@ class calModule():
         end = time.time()
         print("生成概率周期数据完毕，用时：",end-start)
 
-    def initDataWithZone(self,page=33,scope=100,zone=3):
+    def initDataWithZone(self,page=33,scope=100,zone=10):
         self.__page = page
         self.__scope = scope
         self.__zone = zone
@@ -172,6 +172,7 @@ class calModule():
         # 将该数据插入到期数表
         self.__modb.tterm.insert(newTerm.__dict__)
         # 生成luckynum
+        # print("\033[3;32m当前的页面设置为%d页,回滚设置为%d\033[1;33m")
         self.createAllLuckyDataWithZone(1, self.__page,self.__zone)
 
     def getLastOneTermData(self):
@@ -191,7 +192,7 @@ class calModule():
     def getLuckyNumByCondition(self,condition):
         return self.__modb.tlucky.find(condition)
 
-    def saveResultToFile(self,fileName,termID,numSize):
+    def saveLuckyNumToFile(self,fileName,termID,numSize):
         datas = []
         with open(fileName, 'w') as f:
             for data in test.getLuckyNumByCondition({'termID': termID}):
@@ -203,23 +204,50 @@ class calModule():
             for d in datas:
                 f.write("10/" + d + "/N/0~1~2~3~4/N\r\n")
 
+    def __getLuckyNumInSmallestScope(self,moduleID,groupID,numSize):
+        smallestScope = 9999
+        condition = {'groupID':groupID,'moduleID':moduleID,'numSize':numSize}
+        datas = self.getIntervalData(condition)
+        for data in datas:
+            if data['last%d5'%numSize] !=-1 and data['last%d5'%numSize] < smallestScope:
+                smallestScope = data['last%d5'%numSize]
+        return smallestScope
+
+    def isLuckyCanBeUsedBySmallScope(self,termID,moduleID,groupID,numSize):
+        smallScope = self.__getLuckyNumInSmallestScope(moduleID,groupID,numSize)
+        if smallScope == 9999:
+            return True
+        #将该组数据排序，以计算最新一期与上一期是否位于最小周期内
+        nearData = ""
+        temp = []
+        datas = self.getIntervalData({'groupID':groupID,'moduleID':moduleID,'numSize':numSize})
+        for da in datas:
+            temp.append(da)
+        for index,data in enumerate(temp):
+            if data['termID'] == termID:
+                if index >1:
+                    nearData = temp[index-1]['termID']
+                    break
+        print(nearData)
+        if countTermSub(termID,nearData) <= smallScope:
+            return False
+        else:
+            return True
+
 
 if __name__ == '__main__':
     test = calModule()
-    # test.initData(scope=200)
-    # test.createForecastData()
-    # test.termForcast = test.getLastOneTermID()
-    # condition = {'termID': test.termForcast}
-    # for data in test.getIntervalData(condition):
-    #     moduleID = data['moduleID']
-    #     groupID = data['groupID']
-    #     numSize = data['numSize']
-    #     #从概算周期表中找出moduleID和groupID相同的项
-    #     co = {'groupID':groupID,'moduleID':moduleID,'numSize':numSize,
-    #           'termID':{'$ne':test.termForcast}}
-    #     for sdata in test.getIntervalData(co):
-    #         print(sdata)
+
+    test.termForcast = test.getLastOneTermID()
+    condition = {'termID': test.termForcast}
+    for data in test.getIntervalData(condition):
+        moduleID = data['moduleID']
+        groupID = data['groupID']
+        numSize = data['numSize']
+        #从概算周期表中找出moduleID和groupID相同的项
+        if test.isLuckyCanBeUsedBySmallScope(test.termForcast,moduleID,groupID,numSize):
+            print("\033[3;33m%s期%d页%d组数可以加入文档，继续使用！\033[3;32m"%(test.termForcast,moduleID,groupID))
     test.initDataWithZone()
-    # test.createForecastDataWithZone()
-    # test.termForcast = test.getLastOneTermID()
-    test.saveResultToFile("/home/wxy/LuckyNumber/2019143.txt","2019143",5)
+    test.createForecastDataWithZone()
+    test.termForcast = test.getLastOneTermID()
+    test.saveResultToFile("G:/LuckyNumber/2019143.txt","2019143",5)

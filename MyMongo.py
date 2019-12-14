@@ -190,15 +190,10 @@ class myDb:
     # termdata应该为本期未开奖的数据
     # resultdata为上期开奖结果
     # 私有方法，类外不可调用
-    def __groupCal(self, page, funcStart, funcEnd, termdata, resultdata):
+    def __groupCal(self, page, funcStart, funcEnd, termdata, red,blue):
         pageData = []
         groupNum = int(funcEnd / 6)
-        termRightData = getDatasRight(resultdata['red'])
-
-        onePageNum = self.__calFuncByGroup(funcStart, funcEnd, resultdata['red'], resultdata['blue'])
-
-        # 开奖号码尾数去重
-        termRightData = list(set(termRightData))
+        onePageNum = self.__calFuncByGroup(funcStart, funcEnd, red, blue)
         for g in range(groupNum):
             # 概率性数据集表
             calRes = luckyNum()
@@ -211,6 +206,9 @@ class myDb:
             if termdata['red'] == []:
                 calRes.rightNum = -1
             else:
+                termRightData = getDatasRight(termdata['red'])
+                # 开奖号码尾数去重
+                termRightData = list(set(termRightData))
                 calRes.rightNum = 0
                 for val in termRightData:
                     if val in list(set(calRes.num)):
@@ -249,13 +247,14 @@ class myDb:
                         datas[index]['red'][i] -= 33
         for index in range(len(datas)):
             if index >= 1:
-                pageData = self.__groupCal(page, self.__funcStart, self.__funcEnd, datas[index], datas[index - 1])
+                pageData = self.__groupCal(page, self.__funcStart, self.__funcEnd, datas[index],
+                                           datas[index - 1]['red'],datas[index-1]['blue'])
                 if len(pageData) > 0:
                     self.tlucky.insert_many(pageData)
 
     # --------创建表多少期多少页数据,包含数据翻滚-----------------
     def createLuckyTableWithZone(self, scope, page,zone,redNum):
-        datas = self.getTermDatas(scope+zone)
+        datas = self.getTermDatas(scope+zone-1)
         if len(datas) < 1:
             print("请先生成开奖信息表！.......")
             return
@@ -265,19 +264,21 @@ class myDb:
         if ipage ==0:
             ipage = 33
         #每一组里的第一页均为原始值
-        if ipage > 1 and ipage < 33:
-            for index in range(len(datas)):
-                for i in range(len(datas[index]['red'])):
-                    datas[index]['red'][i] += ipage
-                    if datas[index]['red'][i] > 33:
-                        datas[index]['red'][i] -= 33
         for index in range(len(datas)):
-            if index >= zone+1:
-                pageData = self.__groupCal(ipage+izone*33, self.__funcStart, self.__funcEnd, datas[index], datas[index -1])
+            if index >= zone:
+                # 定义一组红球和蓝球，每次回滚或自增时都需要改变
+                red = []
+                blue = 0
+                for r in datas[index-izone-1]['red']:
+                    r += ipage-1
+                    if r > 33:
+                        r -= 33
+                    red.append(r)
+                blue = datas[index-izone-1]['blue']
+                pageData = self.__groupCal(page,self.__funcStart,self.__funcEnd,datas[index],red,blue)
+                # print("\033[1;33m这是第%d页，termID[%s]=\033[3;31m" % (page, datas[index]["termID"]), red,blue)
                 if len(pageData) > 0:
                     self.tlucky.insert_many(pageData)
-
-
 
     #获取所有的计算统计数据
     def getAllLuckyNum(self):
@@ -321,7 +322,7 @@ class myDb:
                                               {'$set': {'last%d%d' % (mod[index]['numSize'],
                                                                       mod[index]['rightNum']): mod[index]['last%d%d' % (
                                                   mod[index]['numSize'], mod[index]['rightNum'])]}})
-                        print("更新：",mod[index]['dataID'],'last%d%d' % (mod[index]['numSize'],mod[index]['rightNum']),
+                        print("\033[1;33m更新：\033[3;32m",mod[index]['dataID'],'last%d%d' % (mod[index]['numSize'],mod[index]['rightNum']),
                               "=", mod[index]['last%d%d' % (mod[index]['numSize'], mod[index]['rightNum'])])
                 finally:
                     lock.release()
@@ -329,25 +330,6 @@ class myDb:
                 T = threading.Thread(target=run,args=(mod,index))
                 T.start()
                 T.join()
-            # for index in range(len(mod)):
-            #     #如果计算过周期差的话该条数据将不再计算
-            #     #一般只有最新加入的数据才没有进行周期差的计算
-            #     if mod[index]['last66']!=-1 or mod[index]['last65']!=-1 \
-            #             or mod[index]['last60']!=-1 or  mod[index]['last55'] != -1 \
-            #             or mod[index]['last50']!=-1 :
-            #         continue
-            #     else:
-            #         if index == 0:
-            #             mod[index]['last%d%d'%(mod[index]['numSize'],mod[index]['rightNum'])] = 9999
-            #         elif index > 0:
-            #             mod[index]['last%d%d' % (mod[index]['numSize'],mod[index]['rightNum'])] = \
-            #                 countTermSub(mod[index]['termID'],mod[index-1]['termID'])
-            #
-            #         self.tinterval.update({'dataID':mod[index]['dataID']},
-            #                                     {'$set':{'last%d%d'%(mod[index]['numSize'],
-            #                                              mod[index]['rightNum']):mod[index]['last%d%d' % (
-            #                                              mod[index]['numSize'], mod[index]['rightNum'])]}})
-
 
     def getIntervalDataByCondition(self,condition):
         datas = self.tinterval.find(condition)
