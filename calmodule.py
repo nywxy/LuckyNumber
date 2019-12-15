@@ -14,7 +14,7 @@ class calModule():
         self.__zone = 32
         self.__intervalThreshold = 10 #查找间隔阈值
         self.__funcStart = 1 #计算函数开始索引
-        self.__funcEnd = 216 #计算函数结束索引
+        self.__funcEnd = 414 #计算函数结束索引
         self.termForcast = ""
 
     #---------------对外接口--------------------------
@@ -84,7 +84,7 @@ class calModule():
         end = time.time()
         print("生成概率周期数据完毕，用时：",end-start)
 
-    def initDataWithZone(self,page=33,scope=100,zone=20):
+    def initDataWithZone(self,page=33,scope=100,zone=5):
         self.__page = page
         self.__scope = scope
         self.__zone = zone
@@ -204,6 +204,45 @@ class calModule():
             for d in datas:
                 f.write("10/" + d + "/N/0~1~2~3~4/N\r\n")
 
+    def saveLuckyNumWith5055(self, filePath, termID):
+        pdata = []
+        pdata2 = []
+        # pdata3 = []
+        tdata = []
+        saveData = []
+        condition = {'termID': termID}
+        preCondition = {'termID': str(int(termID) - 1)}
+        preCondition2 = {'termID': str(int(termID) - 2)}
+        # preCondition3 = {'termID': str(int(termID) - 3)}
+        for data in self.getLuckyNumByCondition(preCondition):
+            pdata.append(data)
+        for data in self.getLuckyNumByCondition(preCondition2):
+            pdata2.append(data)
+        # for data in self.getLuckyNumByCondition(preCondition3):
+        #     pdata3.append(data)
+        for data in self.getLuckyNumByCondition(condition):
+            tdata.append(data)
+        for i in range(len(tdata)):
+            if pdata[i]['numSize'] >= 5 and pdata[i]['rightNum'] == 0:
+                if tdata[i]['numSize'] == 5:
+                    str1 = "10/" + "~".join(list(map(str, set(tdata[i]['num'])))) + "/N/1~2~3~4~5/N\r\n"
+                    saveData.append(str1)
+            if pdata2[i]['numSize'] >= 5 and pdata2[i]['rightNum'] == 0:
+                if tdata[i]['numSize'] == 5:
+                    str1 = "10/" + "~".join(list(map(str, set(tdata[i]['num'])))) + "/N/1~2~3~4~5/N\r\n"
+                    saveData.append(str1)
+            # if pdata3[i]['numSize'] >= 5 and pdata3[i]['rightNum'] == 0:
+            #     if tdata[i]['numSize'] == 5:
+            #         str1 = "10/" + "~".join(list(map(str, set(tdata[i]['num'])))) + "/N/1~2~3~4~5/N\r\n"
+            #         saveData.append(str1)
+            if tdata[i]['numSize'] == 5:
+                str1 = "10/" + "~".join(list(map(str, set(tdata[i]['num'])))) + "/N/0~1~2~3~4/N\r\n"
+                saveData.append(str1)
+        saveData = list(set(saveData))
+        with open(filePath + termID + "5055.txt", 'w') as f:
+            for d in saveData:
+                f.write(d)
+
     def __getLuckyNumInSmallestScope(self,moduleID,groupID,numSize):
         smallestScope = 9999
         condition = {'groupID':groupID,'moduleID':moduleID,'numSize':numSize}
@@ -237,16 +276,17 @@ class calModule():
 
 if __name__ == '__main__':
     test = calModule()
-    test.initDataWithZone()
-    test.createForecastDataWithZone()
-    test.termForcast = test.getLastOneTermID()
-    condition = {'termID': test.termForcast}
-    for data in test.getIntervalData(condition):
-        moduleID = data['moduleID']
-        groupID = data['groupID']
-        numSize = data['numSize']
-        #从概算周期表中找出moduleID和groupID相同的项
-        if test.isLuckyCanBeUsedBySmallScope(test.termForcast,moduleID,groupID,numSize):
-            print("\033[3;33m%s期%d页%d组数可以加入文档，继续使用！\033[3;32m"%(test.termForcast,moduleID,groupID))
-
-    test.saveLuckyNumToFile("E:/LuckyNumber/2019143.txt","2019143",5)
+    # test.initDataWithZone()
+    # test.createForecastDataWithZone()
+    # test.termForcast = test.getLastOneTermID()
+    # condition = {'termID': test.termForcast}
+    # for data in test.getIntervalData(condition):
+    #     moduleID = data['moduleID']
+    #     groupID = data['groupID']
+    #     numSize = data['numSize']
+    #     #从概算周期表中找出moduleID和groupID相同的项
+    #     if test.isLuckyCanBeUsedBySmallScope(test.termForcast,moduleID,groupID,numSize):
+    #         print("\033[3;33m%s期%d页%d组数可以加入文档，继续使用！\033[3;32m"%(test.termForcast,moduleID,groupID))
+    #
+    # test.saveLuckyNumToFile("E:/LuckyNumber/2019143.txt","2019143",5)
+    test.saveLuckyNumWith5055("E:/LuckyNumber/","2019143")

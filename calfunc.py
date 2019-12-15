@@ -859,4 +859,882 @@ def	jxM217(red,blue):
 def	jxM218(red,blue):
 	return Right(round(sum(red)/40))
 
+def jxM219(red, blue):
+    result = round(sum(red) / 17 + 1)
+    return Right(result)
+
+def jxM220(red, blue):
+    result = round(sum(red) / 18 + 4)
+    return Right(result)
+
+
+def jxM221(red, blue):
+    result = round(sum(red) / 22 + 1)
+    return Right(result)
+
+
+def jxM222(red, blue):
+    result = round(sum(red) / 23 + 5)
+    return Right(result)
+
+
+def jxM223(red, blue):
+    result = int((sum(red) / 100) % 10) + int((sum(red) / 10) % 10) + int((sum(red) % 10)) + 9
+    return Right(result)
+
+
+def jxM224(red, blue):
+    return Right(abs(red[3] - 12) + 2)
+
+
+def jxM225(red, blue):
+    if int((sum(red) - red[1]) / red[1]) + 6 > 33:
+        result = int((sum(red) - red[1]) / red[1]) + 6 - 33
+    else:
+        result = int((sum(red) - red[1]) / red[1]) + 6
+    return Right(result)
+
+
+def jxM226(red, blue):
+    return Right(int((sum(red) - red[2]) / red[2]) + 5)
+
+
+def jxM227(red, blue):
+    return Right(int((sum(red) - red[3]) / red[3]) + 3)
+
+
+def jxM228(red, blue):
+    return Right(int((sum(red) - red[4]) / red[4]) + 5)
+
+
+def jxM229(red, blue):
+    return Right(int((sum(red) - red[5]) / red[5]) + 8)
+
+
+def jxM230(red, blue):
+    return Right((sum(red) - red[0]) % red[0] + 9)
+
+
+def jxM231(red, blue):
+    return Right((sum(red) - red[1]) % red[1] + 7)
+
+
+def jxM232(red, blue):
+    return Right((sum(red) - red[2]) % red[2] + 9)
+
+
+def jxM233(red, blue):
+    return Right((sum(red) - red[3]) % red[3] + 3)
+
+
+def jxM234(red, blue):
+    return Right((sum(red) - red[4]) % red[4] + 2)
+
+
+def jxM235(red, blue):
+    return Right((sum(red) - red[5]) % red[5] + 3)
+
+
+def jxM236(red, blue):
+    return Right(int(math.pow(red[0] * red[1], 1 / 2)) + 8)
+
+
+def jxM237(red, blue):
+    return Right(int(math.pow(red[1] * red[2], 1 / 2)) + 4)
+
+
+def jxM238(red, blue):
+    return Right(int(math.pow(red[2] * red[3], 1 / 2)) + 6)
+
+
+def jxM239(red, blue):
+    return Right(int(math.pow(red[3] * red[4], 1 / 2)) + 2)
+
+
+def jxM240(red, blue):
+    return Right(int(math.pow(red[4] * red[5], 1 / 2)) + 6)
+
+
+def jxM241(red, blue):
+    return Right(int(math.pow(red[0] * red[5], 1 / 2)) + 4)
+
+
+def jxM242(red, blue):
+    return Right(int(math.pow(red[0] * red[2], 1 / 2)) + 3)
+
+
+def jxM243(red, blue):
+    return Right(int(math.pow(red[0] * red[3], 1 / 2)) + 3)
+
+
+def jxM244(red, blue):
+    return Right(int(math.pow(red[0] * red[4], 1 / 2)) + 8)
+
+
+def jxM245(red, blue):
+    return Right(int(math.pow(red[1] * red[3], 1 / 2)) + 3)
+
+
+def jxM246(red, blue):
+    return Right(int(math.pow(red[1] * red[4], 1 / 2)) + 2)
+
+
+def jxM247(red, blue):
+    return Right(int(math.pow(red[1] * red[5], 1 / 2)) + 7)
+
+
+def jxM248(red, blue):
+    return Right(int(math.pow(red[2] * red[4], 1 / 2)) + 9)
+
+
+def jxM249(red, blue):
+    return Right(int(math.pow(red[2] * red[5], 1 / 2)) + 5)
+
+
+def jxM250(red, blue):
+    return Right(int(math.pow(red[3] * red[5], 1 / 2)) + 0)
+
+
+def jxM251(red, blue):
+    if red[5] + blue + 2 <= 33:
+        result = red[5] + blue + 2
+    else:
+        result = red[5] + blue + 2 - 33
+    return Right(result)
+
+
+def jxM252(red, blue):
+    return Right(round((red[1] + red[2] + red[3] + red[4] + blue) / 6) + 8)
+
+
+def jxM253(red, blue):
+    return Right(red[1] + blue + 8)
+
+
+def jxM254(red, blue):
+    return Right(red[5] - red[1] + 1 + 4)
+
+
+def jxM255(red, blue):
+    if red[1] + red[5] + 1 + 1 <= 33:
+        return Right(red[1] + red[5] + 1 + 1)
+    else:
+        return Right(red[1] + red[5] + 1 + 1 - 33)
+
+
+def jxM256(red, blue):
+    if red[5] - red[1] + 10 + 9 <= 33:
+        return Right(red[5] - red[1] + 10 + 9)
+    else:
+        return Right(red[5] - red[1] + 10 + 9 - 33)
+
+
+def jxM257(red, blue):
+    return Right(red[0] + red[1] + 7)
+
+
+def jxM258(red, blue):
+    if red[3] + red[0] + 1 > 33:
+        return Right(red[3] + red[0] + 1 - 33)
+    else:
+        return Right(red[3] + red[0] + 1)
+
+
+def jxM259(red, blue):
+    return Right(red[3] - red[0] + 7 + 6)
+
+
+def jxM260(red, blue):
+    return Right(int(sum(red[2:6]) / 4) + 9)
+
+
+def jxM261(red, blue):
+    return Right(int(sum(red[:3]) / 3) + 3)
+
+
+def jxM262(red, blue):
+    if red[1] + red[2] + 9 <= 33:
+        return Right(red[1] + red[2] + 9)
+    else:
+        return Right(red[1] + red[2] + 9 - 33)
+
+
+def jxM263(red, blue):
+    return Right(abs(red[4] - red[3] + 10) + 9)
+
+
+def jxM264(red, blue):
+    return Right(red[0] + 12 + 3)
+
+
+def jxM265(red, blue):
+    return Right(red[1] - red[0] + 7)
+
+
+def jxM266(red, blue):
+    return Right(red[2] - red[0] + 5)
+
+
+def jxM267(red, blue):
+    return Right(red[3] - red[0] + 1)
+
+
+def jxM268(red, blue):
+    return Right(red[4] - red[0] + 0)
+
+
+def jxM269(red, blue):
+    return Right(red[5] - red[0] + 5)
+
+
+def jxM270(red, blue):
+    return Right(red[2] - red[1] + 8)
+
+
+def jxM271(red, blue):
+    return Right(red[3] - red[1] + 2)
+
+
+def jxM272(red, blue):
+    return Right(red[4] - red[1] + 0)
+
+
+def jxM273(red, blue):
+    return Right(red[5] - red[1] + 9)
+
+
+def jxM274(red, blue):
+    return Right(red[3] - red[2] + 7)
+
+
+def jxM275(red, blue):
+    return Right(red[4] - red[2] + 4)
+
+
+def jxM276(red, blue):
+    return Right(red[5] - red[2] + 9)
+
+
+def jxM277(red, blue):
+    return Right(red[5] - blue + 4)
+
+
+def jxM278(red, blue):
+    if int(math.pow((red[2] * red[3] * red[4]), 1 / 2) + 4) <= 33:
+        return Right(int(math.pow((red[2] * red[3] * red[4]), 1 / 2)) + 4)
+    else:
+        return Right(int(math.pow((red[2] * red[3] * red[4]), 1 / 4)) + 4)
+
+
+def jxM279(red, blue):
+    return Right(red[4] - red[3] + 5)
+
+
+def jxM280(red, blue):
+    return Right(red[5] - red[3] + 9)
+
+
+def jxM281(red, blue):
+    return Right(red[5] - red[4] + 2)
+
+
+def jxM282(red, blue):
+    return Right(abs(red[0] - 5) + 3)
+
+
+def jxM283(red, blue):
+    return Right(abs(red[1] - 5) + 0)
+
+
+def jxM284(red, blue):
+    return Right(abs(red[2] - 5) + 7)
+
+
+def jxM285(red, blue):
+    return Right(abs(red[3] - 5) + 8)
+
+
+def jxM286(red, blue):
+    return Right(abs(red[4] - 5) + 1)
+
+
+def jxM287(red, blue):
+    return Right(abs(red[5] - 5) + 6)
+
+
+def jxM288(red, blue):
+    return Right(red[0] + 5 + 4)
+
+
+def jxM289(red, blue):
+    return Right(red[1] + 5 + 0)
+
+
+def jxM290(red, blue):
+    return Right(red[2] + 5 + 6)
+
+
+def jxM291(red, blue):
+    return Right(red[3] + 5 + 2)
+
+
+def jxM292(red, blue):
+    if red[4] + 5 + 8 > 33:
+        return Right(red[4] + 5 + 8 - 33)
+    else:
+        return Right(red[4] + 5 + 8)
+
+
+def jxM293(red, blue):
+    if red[5] + 5 + 6 > 33:
+        return Right(red[5] + 5 + 6 - 33)
+    else:
+        return Right(red[5] + 5 + 6)
+
+
+def jxM294(red, blue):
+    return Right(int(math.pow((red[0] * blue), 1 / 2)) + 2)
+
+
+def jxM295(red, blue):
+    return Right(int(math.pow((red[1] * blue), 1 / 2)) + 0)
+
+
+def jxM296(red, blue):
+    return Right(int(math.pow((red[2] * blue), 1 / 2)) + 8)
+
+
+def jxM297(red, blue):
+    return Right(int(math.pow((red[3] * blue), 1 / 2)) + 9)
+
+
+def jxM298(red, blue):
+    return Right(int(math.pow((red[4] * blue), 1 / 2)) + 9)
+
+
+def jxM299(red, blue):
+    return Right(int(math.pow((red[5] * blue), 1 / 2)) + 8)
+
+
+def jxM300(red, blue):
+    if int(math.pow((red[3] * red[1] * red[2]), 1 / 2)) + 6 <= 33:
+        return Right(int(math.pow((red[3] * red[1] * red[2]), 1 / 2)) + 6)
+    else:
+        return Right(int(math.pow((red[3] * red[1] * red[2]), 1 / 4)) + 6)
+
+
+def jxM301(red, blue):
+    if int(math.pow((red[4] * red[1] * red[2]), 1 / 2)) + 2 <= 33:
+        return Right(int(math.pow((red[4] * red[1] * red[2]), 1 / 2)) + 2)
+    else:
+        return Right(int(math.pow((red[4] * red[1] * red[2]), 1 / 4)) + 2)
+
+
+def jxM302(red, blue):
+    if int(math.pow((red[5] * red[1] * red[2]), 1 / 2)) + 8 <= 33:
+        return Right(int(math.pow((red[5] * red[1] * red[2]), 1 / 2)) + 8)
+    else:
+        return Right(int(math.pow((red[5] * red[1] * red[2]), 1 / 4)) + 8)
+
+
+def jxM303(red, blue):
+    return Right(int(math.pow((red[0] * red[1] * red[2]), 1 / 3)) + 0)
+
+
+def jxM304(red, blue):
+    return Right(int(math.pow((red[0] * red[1] * red[3]), 1 / 3)) + 3)
+
+
+def jxM305(red, blue):
+    return Right(int(math.pow((red[0] * red[1] * red[4]), 1 / 3)) + 4)
+
+
+def jxM306(red, blue):
+    return Right(int(math.pow((red[0] * red[1] * red[5]), 1 / 3)) + 8)
+
+
+def jxM307(red, blue):
+    return Right(int(math.pow((red[3] * red[1] * red[2]), 1 / 3)) + 2)
+
+
+def jxM308(red, blue):
+    return Right(int(math.pow((red[4] * red[1] * red[2]), 1 / 3)) + 5)
+
+
+def jxM309(red, blue):
+    return Right(int(math.pow((red[5] * red[1] * red[2]), 1 / 3)) + 3)
+
+
+def jxM310(red, blue):
+    return Right(int(math.pow((red[2] * red[3] * red[4]), 1 / 3)) + 4)
+
+
+def jxM311(red, blue):
+    return Right(int(math.pow((red[0] * red[1] * red[2] * red[3]), 1 / 4)) + 2)
+
+
+def jxM312(red, blue):
+    return Right(int(math.pow((red[0] * red[1] * red[2] * red[4]), 1 / 4)) + 1)
+
+
+def jxM313(red, blue):
+    return Right(int(math.pow((red[0] * red[1] * red[2] * red[5]), 1 / 4)) + 1)
+
+
+def jxM314(red, blue):
+    return Right(int(math.pow((red[4] * red[1] * red[2] * red[3]), 1 / 4)) + 7)
+
+
+def jxM315(red, blue):
+    return Right(int(math.pow((red[5] * red[1] * red[2] * red[3]), 1 / 4)) + 0)
+
+
+def jxM316(red, blue):
+    return Right(int(math.pow((red[4] * red[5] * red[2] * red[3]), 1 / 4)) + 6)
+
+
+def jxM317(red, blue):
+    return Right(int(math.pow((red[3] * red[4] * red[5] * red[1]), 1 / 4)) + 7)
+
+
+def jxM318(red, blue):
+    return Right(34 - red[0] + 9)
+
+
+def jxM319(red, blue):
+    return Right((sum(red[1:4]) + blue) / 4 + 8)
+
+
+def jxM320(red, blue):
+    return Right(abs(blue - (sum(red[1:4]) + blue) / 4) + 2)
+
+
+def jxM321(red, blue):
+    return Right(abs((sum(red[2:5]) + blue) / 4 - blue) + 1)
+
+
+def jxM322(red, blue):
+    return Right(19 - blue + 4)
+
+
+def jxM323(red, blue):
+    return Right(21 - blue + 8)
+
+
+def jxM324(red, blue):
+    return Right(blue + 2 + 0)
+
+
+def jxM325(red, blue):
+    return Right(blue + 4 + 8)
+
+
+def jxM326(red, blue):
+    return Right(blue * 2 + 6)
+
+
+def jxM327(red, blue):
+    if (blue * 4 + 5) <= 33:
+        return Right(blue * 4 + 5)
+    else:
+        return Right((blue * 4) + 5 - 33)
+
+
+def jxM328(red, blue):
+    return Right(blue + 6 + 1)
+
+
+def jxM329(red, blue):
+    return Right(red[5] - red[0] + 3)
+
+
+def jxM330(red, blue):
+    return Right(abs(red[5] - 2 * red[0]) + 2)
+
+
+def jxM331(red, blue):
+    return Right(abs(red[5] - red[0] - red[1]) + 8)
+
+
+def jxM332(red, blue):
+    return Right(int(math.pow((red[2] * red[3] * red[5]), 1 / 3)) + 2)
+
+
+def jxM333(red, blue):
+    return Right(int(math.pow((red[3] * red[4] * red[5]), 1 / 3)) + 3)
+
+
+def jxM334(red, blue):
+    return Right(int(math.pow((red[0] * red[4] * red[5]), 1 / 3)) + 0)
+
+
+def jxM335(red, blue):
+    return Right(abs(red[5] - red[0] - red[2]) + 6)
+
+
+def jxM336(red, blue):
+    return Right(abs(red[5] - red[0] - red[3]) + 6)
+
+
+def jxM337(red, blue):
+    return Right(abs(red[5] - red[0] - red[4]) + 4)
+
+
+def jxM338(red, blue):
+    return Right(abs(red[5] - red[0] - red[5]) + 7)
+
+
+def jxM339(red, blue):
+    return Right(abs(red[0] - 11) + 0)
+
+
+def jxM340(red, blue):
+    return Right(abs(red[1] - 11) + 9)
+
+
+def jxM341(red, blue):
+    return Right(abs(red[2] - 11) + 3)
+
+
+def jxM342(red, blue):
+    return Right(abs(red[3] - 11) + 8)
+
+
+def jxM343(red, blue):
+    return Right(abs(red[4] - 11) + 4)
+
+
+def jxM344(red, blue):
+    return Right(abs(red[5] - 11) + 4)
+
+
+def jxM345(red, blue):
+    return Right(int(math.pow((red[0] * red[1] * red[4] * red[5]), 1 / 4)) + 6)
+
+
+def jxM346(red, blue):
+    return Right(red[0] + 11 + 0)
+
+
+def jxM347(red, blue):
+    return Right(red[1] + 11 + 9)
+
+
+def jxM348(red, blue):
+    if red[2] + 11 + 5 > 33:
+        return Right(red[2] + 11 + 5 - 33)
+    else:
+        return Right(red[2] + 11 + 5)
+
+
+def jxM349(red, blue):
+    if red[3] + 11 + 5 > 33:
+        return Right(red[3] + 11 + 5 - 33)
+    else:
+        return Right(red[3] + 11 + 5)
+
+
+def jxM350(red, blue):
+    if red[4] + 11 + 0 > 33:
+        return Right(red[4] + 11 + 0 - 33)
+    else:
+        return Right(red[4] + 11 + 0)
+
+
+def jxM351(red, blue):
+    if red[5] + 11 + 5 > 33:
+        return Right(red[5] + 11 + 5 - 33)
+    else:
+        return Right(red[5] + 11 + 5)
+
+
+def jxM352(red, blue):
+    return Right(round(sum(red) / 39) + 8)
+
+
+def jxM353(red, blue):
+    return Right(abs(red[0] - 9) + 2)
+
+
+def jxM354(red, blue):
+    return Right(abs(red[1] - 9) + 2)
+
+
+def jxM355(red, blue):
+    return Right(abs(red[2] - 9) + 3)
+
+
+def jxM356(red, blue):
+    return Right(abs(red[3] - 9) + 1)
+
+
+def jxM357(red, blue):
+    return Right(abs(red[4] - 9) + 7)
+
+
+def jxM358(red, blue):
+    return Right(abs(red[5] - 9) + 2)
+
+
+def jxM359(red, blue):
+    return Right(round(sum(red) / 38) + 5)
+
+
+def jxM360(red, blue):
+    return Right(red[0] + 9 + 3)
+
+
+def jxM361(red, blue):
+    return Right(red[1] + 9 + 5)
+
+
+def jxM362(red, blue):
+    if red[2] + 9 + 9 > 33:
+        return Right(red[2] + 9 + 9 - 33)
+    else:
+        return Right(red[2] + 9 + 9)
+
+
+def jxM363(red, blue):
+    if red[3] + 9 + 4 > 33:
+        return Right(red[3] + 9 + 4 - 33)
+    else:
+        return Right(red[3] + 9 + 4)
+
+
+def jxM364(red, blue):
+    if red[4] + 9 + 9 > 33:
+        return Right(red[4] + 9 + 9 - 33)
+    else:
+        return Right(red[4] + 9 + 9)
+
+
+def jxM365(red, blue):
+    if red[5] + 9 + 8 > 33:
+        return Right(red[5] + 9 + 8 - 33)
+    else:
+        return Right(red[5] + 9 + 8)
+
+
+def jxM366(red, blue):
+    return Right((sum(red[:4]) + min(red)) / 6 - 3 + 1)
+
+
+def jxM367(red, blue):
+    return Right(red[0] + 7 + 2)
+
+
+def jxM368(red, blue):
+    return Right(red[1] + 7 + 8)
+
+
+def jxM369(red, blue):
+    return Right(red[2] + 7 + 4)
+
+
+def jxM370(red, blue):
+    if red[3] + 7 + 8 > 33:
+        return Right(red[3] + 7 + 8 - 33)
+    else:
+        return Right(red[3] + 7 + 8)
+
+
+def jxM371(red, blue):
+    if red[4] + 7 + 1 > 33:
+        return Right(red[4] + 7 + 1 - 33)
+    else:
+        return Right(red[4] + 7 + 1)
+
+
+def jxM372(red, blue):
+    if red[5] + 7 + 1 > 33:
+        return Right(red[5] + 7 + 1 - 33)
+    else:
+        return Right(red[5] + 7 + 1)
+
+
+def jxM373(red, blue):
+    if int(sum(red) / 4) + 1 > 33:
+        return Right(int(sum(red) / 4) + 1 - 33)
+    else:
+        return Right(int(sum(red) / 4) + 1)
+
+
+def jxM374(red, blue):
+    if round(sum(red) / 3) + 7 > 33:
+        return Right(round(sum(red) / 3) + 7 - 33)
+    else:
+        return Right(round(sum(red) / 3) + 7)
+
+
+def jxM375(red, blue):
+    if round(sum(red) / 2) + 4 > 66:
+        return Right(round(sum(red) / 2) + 4 - 66)
+    elif round(sum(red) / 2, 0) + 4 > 33:
+        return Right(round(sum(red) / 2) + 4 - 33)
+    else:
+        return Right(round(sum(red) / 2) + 4)
+
+
+def jxM376(red, blue):
+    return Right(round(sum(red) / 7) + 5)
+
+
+def jxM377(red, blue):
+    return Right(round(sum(red) / 8) + 0)
+
+
+def jxM378(red, blue):
+    return Right(round(sum(red) / 9) + 2)
+
+
+def jxM379(red, blue):
+    return Right(round(sum(red) / 10) + 8)
+
+
+def jxM380(red, blue):
+    return Right(round(sum(red) / 11) + 4)
+
+
+def jxM381(red, blue):
+    return Right(round(sum(red) / 12) + 1)
+
+
+def jxM382(red, blue):
+    return Right(round(sum(red) / 13) + 0)
+
+
+def jxM383(red, blue):
+    return Right(round(sum(red) / 14) + 2)
+
+
+def jxM384(red, blue):
+    return Right(round(sum(red) / 15) + 7)
+
+
+def jxM385(red, blue):
+    return Right(round(math.pow((red[0] * red[1] + red[2]), 1 / 2)) + 6)
+
+
+def jxM386(red, blue):
+    return Right(round(math.pow((red[0] * red[1] + red[3]), 1 / 2)) + 1)
+
+
+def jxM387(red, blue):
+    return Right(round(math.pow((red[0] * red[1] + red[4]), 1 / 2)) + 9)
+
+
+def jxM388(red, blue):
+    return Right(round(math.pow((red[1] * red[0] + red[5]), 1 / 2)) + 3)
+
+
+def jxM389(red, blue):
+    return Right(round(math.pow((red[5] * red[0] + red[1]), 1 / 2)) + 8)
+
+
+def jxM390(red, blue):
+    return Right(round(math.pow((red[0] * red[5] + red[2]), 1 / 2)) + 5)
+
+
+def jxM391(red, blue):
+    return Right(round(math.pow((red[0] * red[5] + red[3]), 1 / 2)) + 2)
+
+
+def jxM392(red, blue):
+    return Right(round(math.pow((red[0] * red[5] + red[4]), 1 / 2)) + 1)
+
+
+def jxM393(red, blue):
+    return Right(round(sum(red) / 16) + 1)
+
+
+def jxM394(red, blue):
+    return Right(round(sum(red) / 35) + 0)
+
+
+def jxM395(red, blue):
+    return Right(round(math.pow((red[2] * red[3] + red[0]), 1 / 2)) + 5)
+
+
+def jxM396(red, blue):
+    return Right(round(math.pow((red[2] * red[3] + red[4]), 1 / 2)) + 5)
+
+
+def jxM397(red, blue):
+    return Right(round(math.pow((red[5] * red[4] + red[0]), 1 / 2)) + 5)
+
+
+def jxM398(red, blue):
+    return Right(round(math.pow((red[3] * red[4] + red[1]), 1 / 2)) + 9)
+
+
+def jxM399(red, blue):
+    return Right(round(math.pow((red[3] * red[4] + red[0]), 1 / 2)) + 6)
+
+
+def jxM400(red, blue):
+    return Right(round(math.pow((red[3] * red[4] + red[5]), 1 / 2)) + 4)
+
+
+def jxM401(red, blue):
+    return Right(round(sum(red) / 19) + 4)
+
+
+def jxM402(red, blue):
+    return Right(round(sum(red) / 20) + 6)
+
+
+def jxM403(red, blue):
+    return Right(round(sum(red) / 21) + 2)
+
+
+def jxM404(red, blue):
+    return Right(round(sum(red) / 24) + 2)
+
+
+def jxM405(red, blue):
+    return Right(round(sum(red) / 25) + 9)
+
+
+def jxM406(red, blue):
+    return Right(round(sum(red) / 26) + 4)
+
+
+def jxM407(red, blue):
+    return Right(round(sum(red) / 27) + 8)
+
+
+def jxM408(red, blue):
+    return Right(round(sum(red) / 28) + 9)
+
+
+def jxM409(red, blue):
+    return Right(round(sum(red) / 29) + 5)
+
+
+def jxM410(red, blue):
+    return Right(round(sum(red) / 30) + 4)
+
+
+def jxM411(red, blue):
+    return Right(round(sum(red) / 31) + 9)
+
+
+def jxM412(red, blue):
+    return Right(round(sum(red) / 32) + 3)
+
+
+def jxM413(red, blue):
+    return Right(round(sum(red) / 33) + 0)
+
+
+def jxM414(red, blue):
+    return Right(round(sum(red) / 34) + 3)
+
+
+def jxM415(red, blue):
+    return Right(round(sum(red) / 40) + 8)
+
+
+
 

@@ -58,7 +58,7 @@ class myDb:
         self.__updateInfo = []
         #计算函数起始信息，每页计算出来多少组数，主要根据这两个值确定，结束应为6的倍数
         self.__funcStart = 1
-        self.__funcEnd = 216
+        self.__funcEnd = 414
 
         #程序初始化时需要先获取最新数据信息，如果获取不到就用以往数据
         self.getLastestTermData()
