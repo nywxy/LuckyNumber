@@ -84,7 +84,7 @@ class calModule():
         end = time.time()
         print("生成概率周期数据完毕，用时：",end-start)
 
-    def initDataWithZone(self,page=33,scope=100,zone=10):
+    def initDataWithZone(self,page=33,scope=100,zone=20):
         self.__page = page
         self.__scope = scope
         self.__zone = zone
@@ -237,7 +237,8 @@ class calModule():
 
 if __name__ == '__main__':
     test = calModule()
-
+    test.initDataWithZone()
+    test.createForecastDataWithZone()
     test.termForcast = test.getLastOneTermID()
     condition = {'termID': test.termForcast}
     for data in test.getIntervalData(condition):
@@ -247,7 +248,5 @@ if __name__ == '__main__':
         #从概算周期表中找出moduleID和groupID相同的项
         if test.isLuckyCanBeUsedBySmallScope(test.termForcast,moduleID,groupID,numSize):
             print("\033[3;33m%s期%d页%d组数可以加入文档，继续使用！\033[3;32m"%(test.termForcast,moduleID,groupID))
-    test.initDataWithZone()
-    test.createForecastDataWithZone()
-    test.termForcast = test.getLastOneTermID()
-    test.saveResultToFile("G:/LuckyNumber/2019143.txt","2019143",5)
+
+    test.saveLuckyNumToFile("E:/LuckyNumber/2019143.txt","2019143",5)
